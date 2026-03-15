@@ -34,6 +34,19 @@ export async function getSnapshot(page: Page): Promise<Snapshot> {
   return page.evaluate(() => window.__JONAH__?.getSnapshot() as Snapshot);
 }
 
+export async function waitForApp(page: Page): Promise<void> {
+  await page.waitForFunction(() => {
+    const app = window.__JONAH__;
+    return Boolean(app && typeof app.getSnapshot === 'function');
+  });
+}
+
+export async function startNewGame(page: Page): Promise<void> {
+  await waitForApp(page);
+  await page.evaluate(() => window.__JONAH__?.debugStartNewGame());
+  await page.waitForFunction(() => window.__JONAH__?.getSnapshot().mode === 'world');
+}
+
 export async function waitForMap(page: Page, mapId: string): Promise<void> {
   await page.waitForFunction(
     (expectedMap) => window.__JONAH__?.getSnapshot().save?.map === expectedMap,

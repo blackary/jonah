@@ -7,13 +7,13 @@ import {
   getWrongAnswer,
   resolveOverlays,
   runScript,
+  startNewGame,
 } from './support';
 
 test('supports desktop keyboard play, pause settings, save, and continue', async ({ page }) => {
   await page.goto('/');
   await page.getByTestId('title-screen').waitFor();
-  await page.evaluate(() => window.__JONAH__?.debugStartNewGame());
-  await page.waitForFunction(() => window.__JONAH__?.getSnapshot().mode === 'world');
+  await startNewGame(page);
   await page.getByTestId('hud').waitFor();
 
   await page.evaluate(() => {
@@ -102,8 +102,7 @@ test('retries trivia with a hint after repeated wrong answers', async ({ page })
 test('plays through the east-of-city finale and returns to title', async ({ page }) => {
   await page.goto('/');
   await page.getByTestId('title-screen').waitFor();
-  await page.evaluate(() => window.__JONAH__?.debugStartNewGame());
-  await page.waitForFunction(() => window.__JONAH__?.getSnapshot().mode === 'world');
+  await startNewGame(page);
 
   await page.evaluate(() => {
     const app = window.__JONAH__;

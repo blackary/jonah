@@ -4,6 +4,7 @@ import {
   resolveOverlays,
   runQuietScript,
   runScript,
+  startNewGame,
   waitForFlag,
   waitForMap,
 } from './support';
@@ -62,6 +63,5 @@ test('shows desktop guidance and keeps touch controls hidden in desktop browsers
   await page.getByTestId('title-screen').waitFor();
   await expect(page.getByTestId('desktop-legend')).toBeVisible();
   await expect(page.getByTestId('mobile-controls')).toBeHidden();
-  await page.getByTestId('title-new').click();
-  await page.waitForFunction(() => window.__JONAH__?.getSnapshot().mode === 'world');
+  await startNewGame(page);
 });

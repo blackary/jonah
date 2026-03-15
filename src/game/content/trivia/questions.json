@@ -1,268 +1,253 @@
 [
   {
     "id": "q001",
-    "prompt": "Where did the LORD send Jonah to preach?",
-    "choices": ["Jerusalem", "Nineveh", "Tyre", "Samaria"],
+    "prompt": "What city did the LORD command Jonah to preach against?",
+    "choices": ["Jerusalem", "Nineveh", "Damascus", "Hebron"],
     "answerIndex": 1,
     "difficulty": "easy",
     "tags": ["jonah1"],
-    "hint": "It was a great city known for wickedness.",
+    "hint": "It was a great city whose evil had come up before the LORD.",
     "verseReference": "Jonah 1:2"
   },
   {
     "id": "q002",
-    "prompt": "To what distant place did Jonah flee?",
-    "choices": ["Tarshish", "Damascus", "Egypt", "Shiloh"],
+    "prompt": "Where did Jonah flee in an attempt to go 'from the presence of the LORD'?",
+    "choices": ["Tarshish", "Egypt", "Babylon", "Shiloh"],
     "answerIndex": 0,
     "difficulty": "easy",
     "tags": ["jonah1"],
-    "hint": "He went as far west as he could imagine.",
+    "hint": "He headed in the opposite direction of Nineveh.",
     "verseReference": "Jonah 1:3"
   },
   {
     "id": "q003",
-    "prompt": "From which port did Jonah board the ship?",
-    "choices": ["Joppa", "Ashdod", "Gaza", "Capernaum"],
-    "answerIndex": 0,
+    "prompt": "Who hurled the great wind upon the sea?",
+    "choices": ["The sailors", "The captain", "The LORD", "Jonah"],
+    "answerIndex": 2,
     "difficulty": "easy",
     "tags": ["jonah1"],
-    "hint": "It was a harbor on the Mediterranean coast.",
-    "verseReference": "Jonah 1:3"
+    "hint": "The storm was not accidental.",
+    "verseReference": "Jonah 1:4"
   },
   {
     "id": "q004",
-    "prompt": "Who hurled a great wind upon the sea?",
-    "choices": ["The sailors", "The captain", "The LORD", "A false god"],
-    "answerIndex": 2,
-    "difficulty": "easy",
-    "tags": ["jonah1"],
-    "hint": "The storm came as an act of divine sovereignty.",
-    "verseReference": "Jonah 1:4"
-  },
-  {
-    "id": "q005",
-    "prompt": "What did the sailors cast into the sea during the storm?",
-    "choices": ["Their oars", "Their cargo", "Their food", "Their sails"],
+    "prompt": "What did the captain tell Jonah to do while the storm raged?",
+    "choices": ["Take the helm", "Call out to your God", "Cast the lots", "Swim for shore"],
     "answerIndex": 1,
-    "difficulty": "easy",
-    "tags": ["jonah1"],
-    "hint": "They tried to lighten the ship.",
-    "verseReference": "Jonah 1:5"
-  },
-  {
-    "id": "q006",
-    "prompt": "Where was Jonah when the storm first raged?",
-    "choices": ["At the helm", "In the hold asleep", "Praying on deck", "Clinging to the mast"],
-    "answerIndex": 1,
-    "difficulty": "easy",
-    "tags": ["jonah1"],
-    "hint": "He had gone down below.",
-    "verseReference": "Jonah 1:5"
-  },
-  {
-    "id": "q007",
-    "prompt": "Why did Jonah try to flee toward Tarshish?",
-    "choices": ["He feared Nineveh's army", "He wanted wealth", "He tried to flee from the LORD's presence", "He lost the way"],
-    "answerIndex": 2,
     "difficulty": "normal",
     "tags": ["jonah1"],
-    "hint": "The text emphasizes where Jonah was trying to escape from, not only where he was going.",
-    "verseReference": "Jonah 1:3"
-  },
-  {
-    "id": "q008",
-    "prompt": "Why did the captain rebuke Jonah during the storm?",
-    "choices": ["Jonah was stealing cargo", "Jonah had insulted the crew", "Jonah was asleep instead of calling on his god", "Jonah refused to row"],
-    "answerIndex": 2,
-    "difficulty": "normal",
-    "tags": ["jonah1"],
-    "hint": "The captain wanted every possible cry for mercy.",
+    "hint": "Even the pagan captain expected prayer in the crisis.",
     "verseReference": "Jonah 1:6"
   },
   {
-    "id": "q009",
-    "prompt": "What did the sailors use to identify who had brought the storm?",
-    "choices": ["A dream", "Lots", "A map", "A sacrifice"],
+    "id": "q005",
+    "prompt": "How did the sailors seek to learn on whose account the storm had come?",
+    "choices": ["They searched the cargo", "They cast lots", "They read the stars", "They asked the captain"],
     "answerIndex": 1,
-    "difficulty": "easy",
+    "difficulty": "normal",
     "tags": ["jonah1"],
-    "hint": "It was an ancient way of seeking an answer beyond human control.",
+    "hint": "They used a God-governed means of decision.",
     "verseReference": "Jonah 1:7"
   },
   {
-    "id": "q010",
+    "id": "q006",
     "prompt": "How did Jonah describe the LORD to the sailors?",
-    "choices": ["As a local mountain god", "As the God of heaven who made sea and dry land", "As the god of storms only", "As the god of Israel's temple only"],
+    "choices": [
+      "As Israel's tribal god only",
+      "As the God of heaven who made the sea and dry land",
+      "As a god of storms alone",
+      "As the god of Jerusalem's walls"
+    ],
     "answerIndex": 1,
     "difficulty": "normal",
     "tags": ["jonah1"],
-    "hint": "Jonah's confession matched the scope of creation itself.",
+    "hint": "Jonah confessed the LORD's rule over creation itself.",
     "verseReference": "Jonah 1:9"
+  },
+  {
+    "id": "q007",
+    "prompt": "What irony dominates Jonah 1?",
+    "choices": [
+      "The sea is calmer than the prophet",
+      "Pagan sailors fear God while the prophet sleeps in disobedience",
+      "Nineveh appears more faithful than Jerusalem",
+      "Jonah becomes captain of the ship"
+    ],
+    "answerIndex": 1,
+    "difficulty": "hard",
+    "tags": ["jonah1"],
+    "hint": "The people farthest from covenant privilege act most reverently.",
+    "verseReference": "Jonah 1:5-6, 14-16"
+  },
+  {
+    "id": "q008",
+    "prompt": "Why is Jonah's confession in Jonah 1:9 so condemning?",
+    "choices": [
+      "He admits he forgot the law",
+      "He confesses the Creator cannot be escaped by crossing the sea He made",
+      "He reveals he lied about his name",
+      "He proves the storm had nothing to do with him"
+    ],
+    "answerIndex": 1,
+    "difficulty": "hard",
+    "tags": ["jonah1"],
+    "hint": "His theology exposes the folly of his flight.",
+    "verseReference": "Jonah 1:9"
+  },
+  {
+    "id": "q009",
+    "prompt": "What does the sudden calming of the sea after Jonah is cast overboard emphasize?",
+    "choices": [
+      "The sailors finally mastered the storm",
+      "The LORD rules the sea according to His purpose",
+      "Jonah's sacrifice forced God's hand",
+      "The storm had been a natural cycle"
+    ],
+    "answerIndex": 1,
+    "difficulty": "hard",
+    "tags": ["jonah1"],
+    "hint": "The sea obeys the LORD immediately.",
+    "verseReference": "Jonah 1:15-16"
+  },
+  {
+    "id": "q010",
+    "prompt": "What did the LORD appoint to swallow Jonah?",
+    "choices": ["A great fish", "A sea dragon", "A naval rescue crew", "A second storm"],
+    "answerIndex": 0,
+    "difficulty": "easy",
+    "tags": ["jonah2"],
+    "hint": "The creature was God's instrument, not chance.",
+    "verseReference": "Jonah 1:17"
   },
   {
     "id": "q011",
-    "prompt": "What did the sailors do before throwing Jonah overboard?",
-    "choices": ["They prayed to the LORD", "They celebrated", "They abandoned ship", "They chose a new captain"],
-    "answerIndex": 0,
-    "difficulty": "normal",
-    "tags": ["jonah1"],
-    "hint": "They asked not to be held guilty for innocent blood.",
-    "verseReference": "Jonah 1:14"
+    "prompt": "How long was Jonah in the belly of the fish?",
+    "choices": ["One night", "Three days and three nights", "Seven days", "Forty days"],
+    "answerIndex": 1,
+    "difficulty": "easy",
+    "tags": ["jonah2"],
+    "hint": "It was a full period of death-like confinement.",
+    "verseReference": "Jonah 1:17"
   },
   {
     "id": "q012",
-    "prompt": "What happened immediately after Jonah was thrown into the sea?",
-    "choices": ["The ship broke apart", "The storm worsened", "The sea became calm", "Jonah walked on water"],
-    "answerIndex": 2,
-    "difficulty": "easy",
-    "tags": ["jonah1"],
-    "hint": "The raging stopped at once.",
-    "verseReference": "Jonah 1:15"
-  },
-  {
-    "id": "q013",
-    "prompt": "What truth does the storm in Jonah 1 most clearly display?",
-    "choices": ["God is limited to Israel", "God rules the sea and the mission Jonah resists", "Nature is random", "Jonah can bargain with providence"],
-    "answerIndex": 1,
-    "difficulty": "hard",
-    "tags": ["jonah1"],
-    "hint": "The sea obeys the LORD even when Jonah will not.",
-    "verseReference": "Jonah 1:4"
-  },
-  {
-    "id": "q014",
-    "prompt": "What irony stands out in Jonah's behavior during the storm?",
-    "choices": ["He fears fish more than storms", "Pagan sailors seek mercy while the prophet sleeps in disobedience", "The captain leaves the ship", "The cargo becomes weightless"],
-    "answerIndex": 1,
-    "difficulty": "hard",
-    "tags": ["jonah1"],
-    "hint": "The prophet should have been the first to pray.",
-    "verseReference": "Jonah 1:5-6"
-  },
-  {
-    "id": "q015",
-    "prompt": "Why is Jonah's confession in Jonah 1:9 so devastating?",
-    "choices": ["He forgets his own name", "He admits the Creator cannot be escaped by crossing the sea He made", "He reveals he is a sailor", "He proves the storm is ordinary"],
-    "answerIndex": 1,
-    "difficulty": "hard",
-    "tags": ["jonah1"],
-    "hint": "His theology condemns his flight.",
-    "verseReference": "Jonah 1:9"
-  },
-  {
-    "id": "q016",
-    "prompt": "What response did the sailors give after the sea grew calm?",
-    "choices": ["They forgot the LORD", "They feared the LORD and offered sacrifice", "They ran to Nineveh", "They blamed the captain"],
-    "answerIndex": 1,
-    "difficulty": "normal",
-    "tags": ["jonah1"],
-    "hint": "The pagan sailors end the chapter in reverence.",
-    "verseReference": "Jonah 1:16"
-  },
-  {
-    "id": "q017",
-    "prompt": "What did the LORD appoint to swallow Jonah?",
-    "choices": ["A whale hunter", "A great fish", "A sea serpent", "A storm cloud"],
-    "answerIndex": 1,
-    "difficulty": "easy",
-    "tags": ["jonah2"],
-    "hint": "The creature was an instrument of preservation, not just judgment.",
-    "verseReference": "Jonah 1:17"
-  },
-  {
-    "id": "q018",
-    "prompt": "How long was Jonah in the belly of the fish?",
-    "choices": ["One night", "Seven days", "Three days and three nights", "Forty days"],
-    "answerIndex": 2,
-    "difficulty": "easy",
-    "tags": ["jonah2"],
-    "hint": "It mirrors a complete period of burial-like confinement.",
-    "verseReference": "Jonah 1:17"
-  },
-  {
-    "id": "q019",
     "prompt": "From where did Jonah pray in chapter 2?",
-    "choices": ["The temple courts", "The ship's deck", "The belly of the fish", "The city gate"],
+    "choices": ["From Nineveh's wall", "From the ship's deck", "From the belly of the fish", "From the temple courts"],
     "answerIndex": 2,
     "difficulty": "easy",
     "tags": ["jonah2"],
-    "hint": "His prison became a place of prayer.",
+    "hint": "His prison became his prayer chamber.",
     "verseReference": "Jonah 2:1"
   },
   {
-    "id": "q020",
-    "prompt": "What phrase summarizes Jonah's hope at the end of his prayer?",
-    "choices": ["Wisdom belongs to kings", "Salvation belongs to the LORD", "Mercy belongs to the strong", "Justice belongs to sailors"],
+    "id": "q013",
+    "prompt": "What confession concludes Jonah's prayer?",
+    "choices": [
+      "Wisdom belongs to the wise",
+      "Salvation belongs to the LORD",
+      "Mercy belongs to the penitent",
+      "Strength belongs to kings"
+    ],
     "answerIndex": 1,
-    "difficulty": "easy",
+    "difficulty": "normal",
     "tags": ["jonah2"],
-    "hint": "It names the source of deliverance plainly.",
+    "hint": "Jonah ends by naming the only true source of deliverance.",
     "verseReference": "Jonah 2:9"
   },
   {
-    "id": "q021",
-    "prompt": "What did Jonah say had happened to him before the LORD heard him?",
-    "choices": ["He was crowned by Nineveh", "He cried out from distress and Sheol-like depths", "He found a hidden harbor", "He hid in a cave"],
+    "id": "q014",
+    "prompt": "What happened when Jonah's life was fainting away?",
+    "choices": [
+      "He remembered the LORD and his prayer came to God's holy temple",
+      "He found land beneath his feet",
+      "He escaped the fish on his own",
+      "He forgot the LORD completely"
+    ],
+    "answerIndex": 0,
+    "difficulty": "normal",
+    "tags": ["jonah2"],
+    "hint": "His turning point was not self-rescue but Godward remembrance.",
+    "verseReference": "Jonah 2:7"
+  },
+  {
+    "id": "q015",
+    "prompt": "According to Jonah 2:8, what do those who pay regard to vain idols forsake?",
+    "choices": ["Their political power", "Their hope of steadfast love", "Their family inheritance", "Their place in Nineveh"],
     "answerIndex": 1,
     "difficulty": "normal",
     "tags": ["jonah2"],
-    "hint": "His language is full of death imagery.",
-    "verseReference": "Jonah 2:2"
+    "hint": "Jonah contrasts false worship with covenant mercy.",
+    "verseReference": "Jonah 2:8"
   },
   {
-    "id": "q022",
-    "prompt": "What did Jonah believe he would look toward again?",
-    "choices": ["Tarshish", "His own home", "God's holy temple", "The captain"],
-    "answerIndex": 2,
-    "difficulty": "normal",
-    "tags": ["jonah2"],
-    "hint": "Even from the deep, he looked to the place of God's presence.",
-    "verseReference": "Jonah 2:4"
-  },
-  {
-    "id": "q023",
-    "prompt": "What do Jonah 2 and the appointed fish together teach about God's mercy?",
-    "choices": ["Mercy only follows obedience", "God can preserve a rebel in the very place of judgment", "Mercy removes all consequences", "God never confronts sin"],
+    "id": "q016",
+    "prompt": "What does the appointed fish reveal about God's dealing with Jonah?",
+    "choices": [
+      "God abandons rebels once they fall",
+      "God can preserve a rebel in the very place of judgment",
+      "God's mercy cancels all chastening",
+      "God cannot reach Jonah in the sea"
+    ],
     "answerIndex": 1,
     "difficulty": "hard",
     "tags": ["jonah2"],
-    "hint": "The fish is both chastening and rescue.",
+    "hint": "The fish is both discipline and rescue.",
     "verseReference": "Jonah 1:17-2:10"
   },
   {
-    "id": "q024",
-    "prompt": "Why is Jonah's prayer both beautiful and unsettling?",
-    "choices": ["It is too short", "It celebrates deliverance, yet says nothing about compassion for Nineveh", "It contains no Scripture-like language", "It denies the LORD's power"],
+    "id": "q017",
+    "prompt": "What do Jonah's descent images in chapter 2 emphasize?",
+    "choices": [
+      "He merely feared getting wet",
+      "He was brought to the brink of death before God raised him up",
+      "He was wandering without direction",
+      "He had almost reached Tarshish"
+    ],
     "answerIndex": 1,
     "difficulty": "hard",
-    "tags": ["jonah2", "jonah4"],
-    "hint": "Jonah can rejoice in mercy received while resisting mercy shown to others.",
-    "verseReference": "Jonah 2:9; 4:2"
+    "tags": ["jonah2"],
+    "hint": "The language moves from drowning to Sheol to the pit.",
+    "verseReference": "Jonah 2:2-6"
   },
   {
-    "id": "q025",
-    "prompt": "What command did the LORD repeat to Jonah after the fish released him?",
-    "choices": ["Go to Nineveh and call out the message", "Return to Joppa", "Stay by the sea", "Build an altar"],
+    "id": "q018",
+    "prompt": "Why is 'Salvation belongs to the LORD' the decisive note of Jonah's prayer?",
+    "choices": [
+      "Because Jonah finally credits deliverance to God's sovereign mercy rather than his own strength",
+      "Because Jonah now believes sailors save themselves",
+      "Because Jonah expects Nineveh to save him",
+      "Because Jonah denies the need for repentance"
+    ],
     "answerIndex": 0,
+    "difficulty": "hard",
+    "tags": ["jonah2"],
+    "hint": "The prayer ends with God's saving work, not Jonah's resourcefulness.",
+    "verseReference": "Jonah 2:9"
+  },
+  {
+    "id": "q019",
+    "prompt": "What command did the LORD repeat to Jonah after the fish released him?",
+    "choices": ["Return to Joppa", "Go to Nineveh and call out the message God gives", "Stay by the shore", "Build an altar in the wilderness"],
+    "answerIndex": 1,
     "difficulty": "easy",
     "tags": ["jonah3"],
-    "hint": "The second call matched the first in substance.",
+    "hint": "The second commission matched the first in substance.",
     "verseReference": "Jonah 3:1-2"
   },
   {
-    "id": "q026",
+    "id": "q020",
     "prompt": "What message did Jonah proclaim in Nineveh?",
-    "choices": ["Peace to this city", "Forty days, and Nineveh shall be overthrown", "Build a temple at once", "Bring tribute to Israel"],
+    "choices": ["Peace and prosperity are coming", "Yet forty days, and Nineveh shall be overthrown", "Bring tribute to Israel", "Build a harbor for Judah"],
     "answerIndex": 1,
     "difficulty": "easy",
     "tags": ["jonah3"],
-    "hint": "It was short, urgent, and full of warning.",
+    "hint": "The warning was short and urgent.",
     "verseReference": "Jonah 3:4"
   },
   {
-    "id": "q027",
+    "id": "q021",
     "prompt": "How did the people of Nineveh first respond to Jonah's warning?",
-    "choices": ["They mocked him", "They believed God", "They jailed him", "They ignored him"],
+    "choices": ["They mocked him", "They believed God", "They arrested him", "They asked for a sign"],
     "answerIndex": 1,
     "difficulty": "easy",
     "tags": ["jonah3"],
@@ -270,93 +255,203 @@
     "verseReference": "Jonah 3:5"
   },
   {
-    "id": "q028",
-    "prompt": "What did the king of Nineveh do when the news reached him?",
-    "choices": ["He sent Jonah away", "He built a fleet", "He rose from his throne, covered himself with sackcloth, and sat in ashes", "He called for a feast"],
-    "answerIndex": 2,
-    "difficulty": "easy",
+    "id": "q022",
+    "prompt": "What did the king of Nineveh do when the message reached him?",
+    "choices": [
+      "He sent for more soldiers",
+      "He rose from his throne, covered himself with sackcloth, and sat in ashes",
+      "He left the city at once",
+      "He ordered a feast"
+    ],
+    "answerIndex": 1,
+    "difficulty": "normal",
     "tags": ["jonah3"],
-    "hint": "His repentance was public and humble.",
+    "hint": "His repentance was public and humbling.",
     "verseReference": "Jonah 3:6"
   },
   {
-    "id": "q029",
+    "id": "q023",
     "prompt": "According to the king's decree, what were Nineveh's people to turn from?",
-    "choices": ["Commerce", "Violence and evil ways", "Travel", "Singing"],
+    "choices": ["Trade and travel", "Their evil way and the violence in their hands", "Foreign speech", "Military training"],
     "answerIndex": 1,
     "difficulty": "normal",
     "tags": ["jonah3"],
-    "hint": "Repentance included both heart and conduct.",
+    "hint": "Repentance touched both heart and conduct.",
     "verseReference": "Jonah 3:8"
   },
   {
-    "id": "q030",
+    "id": "q024",
     "prompt": "Why did the king say Nineveh should humble itself before God?",
-    "choices": ["Because repentance earns salvation automatically", "Because who knows whether God may turn and relent", "Because Jonah promised prosperity", "Because the army demanded it"],
+    "choices": [
+      "Because repentance automatically earns pardon",
+      "Because who knows whether God may turn and relent",
+      "Because Jonah promised the city safety",
+      "Because the nobles demanded it"
+    ],
     "answerIndex": 1,
     "difficulty": "normal",
     "tags": ["jonah3"],
-    "hint": "The king hoped in mercy without presuming upon it.",
+    "hint": "The king hoped in mercy without presuming on it.",
     "verseReference": "Jonah 3:9"
   },
   {
-    "id": "q031",
-    "prompt": "What did God see before He relented from the disaster He had said He would do?",
-    "choices": ["Their military power", "Their fasting only", "That they turned from their evil way", "Jonah's happiness"],
-    "answerIndex": 2,
-    "difficulty": "normal",
-    "tags": ["jonah3"],
-    "hint": "The text points to visible repentance.",
-    "verseReference": "Jonah 3:10"
-  },
-  {
-    "id": "q032",
+    "id": "q025",
     "prompt": "What does Nineveh's repentance reveal about God's character?",
-    "choices": ["He delights in destroying the repentant", "He is free to show mercy to undeserving sinners", "He can forgive only Israelites", "He changes His standards of holiness"],
+    "choices": [
+      "He delights in destroying the contrite",
+      "He is free to show mercy to those who deserve judgment",
+      "He forgives only Israelites",
+      "He lowers His standard of holiness"
+    ],
     "answerIndex": 1,
     "difficulty": "hard",
     "tags": ["jonah3"],
-    "hint": "The city deserved judgment, yet God showed compassion.",
+    "hint": "The chapter displays compassion without denying justice.",
     "verseReference": "Jonah 3:10; 4:2"
   },
   {
-    "id": "q033",
-    "prompt": "Why did Jonah become angry after Nineveh was spared?",
-    "choices": ["He lost his fare money", "He knew God is gracious and merciful and did not want Nineveh to receive that mercy", "The king insulted him", "The plant had not yet grown"],
+    "id": "q026",
+    "prompt": "What does the king's question 'Who knows?' teach about true repentance?",
+    "choices": [
+      "It bargains with God as an equal",
+      "It pleads for mercy humbly rather than presuming upon it",
+      "It doubts whether God exists",
+      "It treats judgment as unimportant"
+    ],
     "answerIndex": 1,
-    "difficulty": "normal",
+    "difficulty": "hard",
+    "tags": ["jonah3"],
+    "hint": "Repentance hopes in mercy without demanding it.",
+    "verseReference": "Jonah 3:9"
+  },
+  {
+    "id": "q027",
+    "prompt": "What does chapter 3 show about the power of God's word?",
+    "choices": [
+      "It works only when the messenger is eloquent",
+      "God can use a brief warning to humble a great city",
+      "It changes nothing in pagan lands",
+      "It depends on political force"
+    ],
+    "answerIndex": 1,
+    "difficulty": "hard",
+    "tags": ["jonah3"],
+    "hint": "The city's turning begins with God's message, not Jonah's charisma.",
+    "verseReference": "Jonah 3:4-5"
+  },
+  {
+    "id": "q028",
+    "prompt": "What truth about God's character made Jonah angry when Nineveh was spared?",
+    "choices": [
+      "That God is gracious and merciful, slow to anger, and abounding in steadfast love",
+      "That God is distant and silent",
+      "That God favors only Israel's kings",
+      "That God had forgotten His covenant"
+    ],
+    "answerIndex": 0,
+    "difficulty": "easy",
     "tags": ["jonah4"],
-    "hint": "Jonah's anger rose from a true statement about God.",
+    "hint": "Jonah quoted one of Scripture's great confessions of God's mercy.",
     "verseReference": "Jonah 4:2"
   },
   {
-    "id": "q034",
-    "prompt": "What did God appoint to give Jonah shade east of the city?",
-    "choices": ["A cloud", "A plant", "A cedar shelter", "A curtain"],
+    "id": "q029",
+    "prompt": "Why did Jonah sit east of the city?",
+    "choices": ["To trade with travelers", "To see what would become of Nineveh", "To return to the ship", "To gather food for the road"],
     "answerIndex": 1,
     "difficulty": "easy",
     "tags": ["jonah4"],
-    "hint": "It sprang up quickly over his head.",
+    "hint": "He still hoped to watch the city's outcome.",
+    "verseReference": "Jonah 4:5"
+  },
+  {
+    "id": "q030",
+    "prompt": "What did God appoint to give Jonah shade?",
+    "choices": ["A cloud", "A plant", "A stone wall", "A cedar roof"],
+    "answerIndex": 1,
+    "difficulty": "easy",
+    "tags": ["jonah4"],
+    "hint": "It came up quickly over Jonah's head.",
     "verseReference": "Jonah 4:6"
   },
   {
-    "id": "q035",
+    "id": "q031",
     "prompt": "What happened to the plant the next day?",
-    "choices": ["It blossomed", "A worm attacked it and it withered", "It was cut down by sailors", "It became a tree"],
+    "choices": ["It spread over the whole booth", "A worm attacked it so that it withered", "Jonah cut it down himself", "It became a tree"],
     "answerIndex": 1,
-    "difficulty": "easy",
+    "difficulty": "normal",
     "tags": ["jonah4"],
-    "hint": "God appointed more than one creature in chapter 4.",
+    "hint": "God appointed more than one created thing in chapter 4.",
     "verseReference": "Jonah 4:7"
+  },
+  {
+    "id": "q032",
+    "prompt": "What did God appoint when the sun rose?",
+    "choices": ["A heavy rain", "A scorching east wind", "A calm evening breeze", "A flock of birds"],
+    "answerIndex": 1,
+    "difficulty": "normal",
+    "tags": ["jonah4"],
+    "hint": "Jonah's comfort was stripped away completely.",
+    "verseReference": "Jonah 4:8"
+  },
+  {
+    "id": "q033",
+    "prompt": "Whom did God set before Jonah in contrast to the plant?",
+    "choices": [
+      "Only Jonah's family",
+      "Nineveh, with more than 120,000 persons and also much cattle",
+      "The sailors from chapter 1",
+      "The king of Nineveh alone"
+    ],
+    "answerIndex": 1,
+    "difficulty": "normal",
+    "tags": ["jonah4"],
+    "hint": "God's compassion reaches far beyond Jonah's private comfort.",
+    "verseReference": "Jonah 4:11"
+  },
+  {
+    "id": "q034",
+    "prompt": "What does Jonah's anger in chapter 4 reveal about his heart?",
+    "choices": [
+      "He loves mercy for enemies more than for himself",
+      "He can rejoice in mercy received while resenting mercy shown to others",
+      "He no longer believes God is just",
+      "He has forgotten Nineveh entirely"
+    ],
+    "answerIndex": 1,
+    "difficulty": "hard",
+    "tags": ["jonah4"],
+    "hint": "Jonah wants grace to stop where his own compassion stops.",
+    "verseReference": "Jonah 4:2-9"
+  },
+  {
+    "id": "q035",
+    "prompt": "Why is Jonah's quotation of God's character in 4:2 so searching?",
+    "choices": [
+      "Because true doctrine becomes the very reason for his resentment instead of his worship",
+      "Because Jonah discovers God is less merciful than he thought",
+      "Because Jonah rejects everything the LORD has said",
+      "Because Jonah claims Nineveh was righteous all along"
+    ],
+    "answerIndex": 0,
+    "difficulty": "hard",
+    "tags": ["jonah4"],
+    "hint": "He speaks truth about God, but his heart resists what that truth means.",
+    "verseReference": "Jonah 4:2"
   },
   {
     "id": "q036",
     "prompt": "What is the force of God's final question to Jonah?",
-    "choices": ["Jonah's comfort matters more than a city's life", "God exposes Jonah's tiny compassion and contrasts it with divine pity for a great city full of image-bearers", "Nineveh deserved mercy because it was powerful", "The plant was more important than the people"],
+    "choices": [
+      "It teaches that Jonah's comfort matters more than a city's life",
+      "It exposes Jonah's tiny compassion and contrasts it with God's pity for a great city",
+      "It says Nineveh deserved mercy because it was powerful",
+      "It proves the plant mattered more than the people"
+    ],
     "answerIndex": 1,
     "difficulty": "hard",
     "tags": ["jonah4"],
-    "hint": "The book ends by comparing Jonah's grief over a plant with God's compassion for people.",
+    "hint": "The book ends by measuring Jonah's grief over a plant against God's compassion for people.",
     "verseReference": "Jonah 4:10-11"
   }
 ]
