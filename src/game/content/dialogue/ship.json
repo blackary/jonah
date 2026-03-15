@@ -1,0 +1,73 @@
+[
+  {
+    "id": "ship_intro",
+    "lines": [
+      {
+        "speaker": "Captain",
+        "text": "Wind at our back, coin in the chest. Rest if you must, traveler. Tarshish is a long way west."
+      }
+    ]
+  },
+  {
+    "id": "ship_storm",
+    "lines": [
+      {
+        "speaker": "Captain",
+        "text": "This is no common squall. Lash the cargo before the sea tears us open."
+      }
+    ]
+  },
+  {
+    "id": "ship_cleat_hint",
+    "lines": [
+      {
+        "speaker": "Sailor",
+        "text": "The side cleats must hold fast. Leave the center loose so the deck can breathe with the swell."
+      }
+    ]
+  },
+  {
+    "id": "ship_cargo_solved",
+    "lines": [
+      {
+        "speaker": "Captain",
+        "text": "Good. The cargo will ride. Now answer plainly: who has brought this storm upon us?"
+      }
+    ]
+  },
+  {
+    "id": "ship_confession",
+    "lines": [
+      {
+        "speaker": "Jonah",
+        "text": "I am a Hebrew, and I fear the LORD, the God of heaven, who made the sea and the dry land."
+      },
+      {
+        "speaker": "Jonah",
+        "text": "I am fleeing from before His face. Lift me up and cast me into the sea, and then it will quiet down for you."
+      }
+    ]
+  },
+  {
+    "id": "ship_overboard",
+    "lines": [
+      {
+        "speaker": "Narrator",
+        "text": "The sailors rowed hard to return to land, but the sea grew more tempestuous against them."
+      },
+      {
+        "speaker": "Narrator",
+        "text": "At last they lifted Jonah and hurled him into the sea, and the sea ceased from its raging."
+      }
+    ]
+  },
+  {
+    "id": "ship_helm",
+    "lines": [
+      {
+        "speaker": "Helm",
+        "text": "The wheel bucks against the storm like a living thing."
+      }
+    ]
+  }
+]

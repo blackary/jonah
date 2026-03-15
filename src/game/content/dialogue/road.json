@@ -1,0 +1,65 @@
+[
+  {
+    "id": "road_intro",
+    "lines": [
+      {
+        "speaker": "Narrator",
+        "text": "The word of the LORD came to Jonah a second time. The road ahead runs toward Nineveh."
+      }
+    ]
+  },
+  {
+    "id": "traveler_need_water",
+    "lines": [
+      {
+        "speaker": "Traveler",
+        "text": "You look like a man who has seen death and kept walking. Help me stand, and bring me water from the spring east of the road."
+      }
+    ]
+  },
+  {
+    "id": "traveler_waiting",
+    "lines": [
+      {
+        "speaker": "Traveler",
+        "text": "The spring lies eastward in the stones. My throat cannot wait long."
+      }
+    ]
+  },
+  {
+    "id": "traveler_restored",
+    "lines": [
+      {
+        "speaker": "Traveler",
+        "text": "That water is life. The gate of Nineveh lies ahead. Speak quickly there; the city hears only what is urgent."
+      }
+    ]
+  },
+  {
+    "id": "road_guard",
+    "lines": [
+      {
+        "speaker": "Caravan Guard",
+        "text": "The road to Nineveh is open, but the city does not welcome every voice."
+      }
+    ]
+  },
+  {
+    "id": "road_sign",
+    "lines": [
+      {
+        "speaker": "Milestone",
+        "text": "Nineveh: a great city, many streets, and many sins."
+      }
+    ]
+  },
+  {
+    "id": "spring_found",
+    "lines": [
+      {
+        "speaker": "Narrator",
+        "text": "Cool water gathers between the rocks. Jonah fills a flask."
+      }
+    ]
+  }
+]

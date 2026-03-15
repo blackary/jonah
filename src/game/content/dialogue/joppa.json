@@ -1,0 +1,133 @@
+[
+  {
+    "id": "messenger_call",
+    "lines": [
+      {
+        "speaker": "Messenger",
+        "text": "Jonah son of Amittai, hear the word of the LORD."
+      },
+      {
+        "speaker": "Messenger",
+        "text": "Arise. Go to Nineveh, that great city, and call out against it, for its evil has come up before Him."
+      },
+      {
+        "choice": {
+          "prompt": "What will Jonah do?",
+          "options": [
+            {
+              "text": "Go to Nineveh",
+              "value": "obey"
+            },
+            {
+              "text": "Flee toward Tarshish",
+              "value": "flee"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "messenger_reminder",
+    "lines": [
+      {
+        "speaker": "Messenger",
+        "text": "The call has not changed. The LORD sent you east, but your heart is already turning west."
+      }
+    ]
+  },
+  {
+    "id": "merchant_intro",
+    "lines": [
+      {
+        "speaker": "Merchant",
+        "text": "Passage is dear today. Storm-rumors make sailors charge twice."
+      },
+      {
+        "speaker": "Merchant",
+        "text": "Carry my manifest to the sailor at the south pier, bring me his receipt, and I will cover your fare."
+      }
+    ]
+  },
+  {
+    "id": "merchant_return",
+    "lines": [
+      {
+        "speaker": "Merchant",
+        "text": "That receipt will do. Here: a stamped fare token. Hand it to the dockmaster, and he will stop glaring at you."
+      }
+    ]
+  },
+  {
+    "id": "merchant_waiting",
+    "lines": [
+      {
+        "speaker": "Merchant",
+        "text": "The sailor is waiting below with my manifest. No manifest, no token."
+      }
+    ]
+  },
+  {
+    "id": "sailor_manifest",
+    "lines": [
+      {
+        "speaker": "Sailor",
+        "text": "A manifest from the merchant? Good. Here is the receipt. Tell him the cargo is stowed, though not as tidy as he would wish."
+      }
+    ]
+  },
+  {
+    "id": "sailor_done",
+    "lines": [
+      {
+        "speaker": "Sailor",
+        "text": "I have no more papers for you. If you are boarding, bring your courage with your fare."
+      }
+    ]
+  },
+  {
+    "id": "dockmaster_no_fare",
+    "lines": [
+      {
+        "speaker": "Dockmaster",
+        "text": "No token, no gangplank. The sea does not carry stowaways for free."
+      }
+    ]
+  },
+  {
+    "id": "dockmaster_quiz_intro",
+    "lines": [
+      {
+        "speaker": "Dockmaster",
+        "text": "You have the fare, but I will hear whether you even know the call you are running from."
+      }
+    ]
+  },
+  {
+    "id": "dockmaster_pass",
+    "lines": [
+      {
+        "speaker": "Dockmaster",
+        "text": "You know the command well enough. Strange thing to flee from a word you can repeat so clearly."
+      }
+    ]
+  },
+  {
+    "id": "captain_board",
+    "lines": [
+      {
+        "speaker": "Captain",
+        "text": "Tarshish-bound and in a hurry? Then board. We cast off before the tide turns."
+      }
+    ]
+  },
+  {
+    "id": "joppa_sign",
+    "lines": [
+      {
+        "speaker": "Sign",
+        "text": "Piers of Joppa. Eastbound caravans inland. Westbound ships at the long dock."
+      }
+    ]
+  }
+]

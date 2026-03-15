@@ -1,0 +1,47 @@
+[
+  {
+    "id": "fish_intro",
+    "lines": [
+      {
+        "speaker": "Narrator",
+        "text": "The deep closed over Jonah, yet the LORD appointed a great fish to preserve him."
+      }
+    ]
+  },
+  {
+    "id": "fish_puzzle_hint",
+    "lines": [
+      {
+        "speaker": "Jonah",
+        "text": "Three lights rise around me. The eastern one should stay dim. Let the others answer with light."
+      }
+    ]
+  },
+  {
+    "id": "fish_puzzle_solved",
+    "lines": [
+      {
+        "speaker": "Narrator",
+        "text": "The living walls pulse with light, and the chamber grows still enough for prayer."
+      }
+    ]
+  },
+  {
+    "id": "fish_prayer",
+    "lines": [
+      {
+        "speaker": "Jonah",
+        "text": "Salvation belongs to the LORD. From the belly of Sheol, He heard me."
+      }
+    ]
+  },
+  {
+    "id": "fish_release",
+    "lines": [
+      {
+        "speaker": "Narrator",
+        "text": "At the word of the LORD, the fish gave Jonah up upon the dry land."
+      }
+    ]
+  }
+]

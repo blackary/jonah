@@ -1,0 +1,83 @@
+[
+  {
+    "id": "gate_guard_intro",
+    "lines": [
+      {
+        "speaker": "Guard",
+        "text": "Another desert preacher? Say your message plainly if you wish to enter."
+      }
+    ]
+  },
+  {
+    "id": "gate_guard_pass",
+    "lines": [
+      {
+        "speaker": "Guard",
+        "text": "Forty days, you say? Then go. The city should hear what troubles you."
+      }
+    ]
+  },
+  {
+    "id": "gate_banner",
+    "lines": [
+      {
+        "speaker": "Banner",
+        "text": "The cloth bears lions and cedar. Empire stitched in bright dye."
+      }
+    ]
+  },
+  {
+    "id": "nineveh_intro",
+    "lines": [
+      {
+        "speaker": "Narrator",
+        "text": "Jonah entered the city and began to call out the warning entrusted to him."
+      }
+    ]
+  },
+  {
+    "id": "herald_warning",
+    "lines": [
+      {
+        "speaker": "Herald",
+        "text": "You came through the gate with dust on your robe and judgment on your tongue. Say the warning again, loudly."
+      }
+    ]
+  },
+  {
+    "id": "official_audience",
+    "lines": [
+      {
+        "speaker": "Official",
+        "text": "The herald has carried your cry through the square. The king will hear it, but do not soften the word."
+      }
+    ]
+  },
+  {
+    "id": "king_response",
+    "lines": [
+      {
+        "speaker": "King",
+        "text": "If this word is from the God of heaven, then let both man and beast be covered in humility. Let everyone turn from violence and cry mightily to God."
+      }
+    ]
+  },
+  {
+    "id": "city_repents",
+    "lines": [
+      {
+        "speaker": "Narrator",
+        "text": "From the throne to the market street, Nineveh humbled itself. God saw what they did and showed mercy."
+      }
+    ]
+  },
+  {
+    "id": "throne",
+    "lines": [
+      {
+        "speaker": "Throne",
+        "text": "Carved cedar, polished ivory, and the seat of a man who cannot command heaven."
+      }
+    ]
+  }
+]

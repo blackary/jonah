@@ -1,0 +1,87 @@
+[
+  {
+    "id": "east_city_intro",
+    "lines": [
+      {
+        "speaker": "Narrator",
+        "text": "Jonah went out east of the city and made for himself a place to watch what would become of Nineveh."
+      }
+    ]
+  },
+  {
+    "id": "shelter_piece",
+    "lines": [
+      {
+        "speaker": "Jonah",
+        "text": "One more piece will make a little shade."
+      }
+    ]
+  },
+  {
+    "id": "shelter_built",
+    "lines": [
+      {
+        "speaker": "Narrator",
+        "text": "The shelter finally stands. Thin shade, but enough for waiting."
+      }
+    ]
+  },
+  {
+    "id": "plant_grows",
+    "lines": [
+      {
+        "speaker": "Narrator",
+        "text": "The LORD appointed a plant and made it come up over Jonah, that it might be a shade over his head."
+      }
+    ]
+  },
+  {
+    "id": "plant_alive",
+    "lines": [
+      {
+        "speaker": "Jonah",
+        "text": "At last, something gentle in the heat."
+      }
+    ]
+  },
+  {
+    "id": "worm_strikes",
+    "lines": [
+      {
+        "speaker": "Narrator",
+        "text": "At dawn the next day, God appointed a worm that attacked the plant, so that it withered."
+      }
+    ]
+  },
+  {
+    "id": "plant_dead",
+    "lines": [
+      {
+        "speaker": "Jonah",
+        "text": "Shade gone. Stem split. Dust and sun again."
+      }
+    ]
+  },
+  {
+    "id": "east_city_quiz_intro",
+    "lines": [
+      {
+        "speaker": "Voice",
+        "text": "Before the last question is spoken to Jonah, remember what the LORD has shown him."
+      }
+    ]
+  },
+  {
+    "id": "final_question",
+    "lines": [
+      {
+        "speaker": "LORD",
+        "text": "You pity the plant, for which you did not labor, nor did you make it grow."
+      },
+      {
+        "speaker": "LORD",
+        "text": "Should I not pity Nineveh, that great city, with more than one hundred twenty thousand persons who do not know their right hand from their left?"
+      }
+    ]
+  }
+]
