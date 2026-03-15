@@ -48,6 +48,11 @@ export interface MapDecoration {
   x: number;
   y: number;
   kind: string;
+  layer?: 'background' | 'foreground';
+  alpha?: number;
+  scale?: number;
+  bobAmplitude?: number;
+  bobSpeed?: number;
   depthOffset?: number;
   visibleWhen?: RequirementSet;
 }

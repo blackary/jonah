@@ -48,7 +48,14 @@ export const MAPS: Record<string, MapDefinition> = {
       { id: 'barrel_a', x: 5, y: 5, kind: 'barrel' },
       { id: 'barrel_b', x: 6, y: 5, kind: 'barrel' },
       { id: 'crate_stack', x: 11, y: 10, kind: 'crate_stack' },
-      { id: 'boat_shadow', x: 17, y: 3, kind: 'ship_shadow' },
+      { id: 'boat_shadow', x: 17, y: 3, kind: 'ship_shadow', scale: 1.25, alpha: 0.55, depthOffset: -8 },
+      { id: 'watchers', x: 3, y: 7, kind: 'watcher_pair', alpha: 0.88 },
+      { id: 'lantern_quay', x: 10, y: 5, kind: 'lantern', bobAmplitude: 0.5, bobSpeed: 1600 },
+      { id: 'rope_coil', x: 7, y: 10, kind: 'rope_coil' },
+      { id: 'net_stack', x: 14, y: 9, kind: 'net_stack' },
+      { id: 'sail_roll', x: 16, y: 8, kind: 'sail_roll', alpha: 0.9 },
+      { id: 'dock_post_left', x: 1, y: 14, kind: 'dock_post', layer: 'foreground', scale: 1.1 },
+      { id: 'dock_post_right', x: 18, y: 14, kind: 'dock_post', layer: 'foreground', scale: 1.1 },
     ],
   },
   SHIP_DECK: {
@@ -129,6 +136,12 @@ export const MAPS: Record<string, MapDefinition> = {
       { id: 'cargo_a', x: 8, y: 4, kind: 'cargo' },
       { id: 'cargo_b', x: 12, y: 4, kind: 'cargo' },
       { id: 'hatch', x: 10, y: 9, kind: 'hatch' },
+      { id: 'lantern_port', x: 7, y: 2, kind: 'lantern', bobAmplitude: 0.8, bobSpeed: 1200 },
+      { id: 'lantern_starboard', x: 13, y: 2, kind: 'lantern', bobAmplitude: 0.8, bobSpeed: 1280 },
+      { id: 'rope_port', x: 7, y: 11, kind: 'rope_coil' },
+      { id: 'rope_starboard', x: 13, y: 11, kind: 'rope_coil' },
+      { id: 'sail_roll', x: 10, y: 2, kind: 'sail_roll', scale: 1.1, alpha: 0.92 },
+      { id: 'net_port', x: 6, y: 6, kind: 'net_stack', alpha: 0.78 },
     ],
   },
   FISH_INTERIOR: {
@@ -214,6 +227,12 @@ export const MAPS: Record<string, MapDefinition> = {
     decorations: [
       { id: 'spore_a', x: 6, y: 5, kind: 'coral' },
       { id: 'spore_b', x: 14, y: 9, kind: 'coral' },
+      { id: 'rib_nw', x: 6, y: 4, kind: 'fish_rib', scale: 1.05, alpha: 0.82 },
+      { id: 'rib_ne', x: 14, y: 4, kind: 'fish_rib', scale: 1.05, alpha: 0.82 },
+      { id: 'rib_sw', x: 6, y: 10, kind: 'fish_rib', scale: 1.05, alpha: 0.82 },
+      { id: 'rib_se', x: 14, y: 10, kind: 'fish_rib', scale: 1.05, alpha: 0.82 },
+      { id: 'tendril_north', x: 9, y: 4, kind: 'tendril', bobAmplitude: 1.2, bobSpeed: 1100, alpha: 0.88 },
+      { id: 'tendril_south', x: 11, y: 10, kind: 'tendril', bobAmplitude: 0.9, bobSpeed: 1350, alpha: 0.88 },
     ],
   },
   COAST_ROAD: {
@@ -255,6 +274,13 @@ export const MAPS: Record<string, MapDefinition> = {
     objects: [
       { id: 'spring', x: 16, y: 4, kind: 'spring', event: 'script:spring' },
       { id: 'milestone', x: 12, y: 11, kind: 'milestone', event: 'dialogue:road_sign' },
+    ],
+    decorations: [
+      { id: 'road_cairn', x: 10, y: 3, kind: 'cairn' },
+      { id: 'shrub_a', x: 4, y: 9, kind: 'shrub', alpha: 0.9 },
+      { id: 'shrub_b', x: 14, y: 12, kind: 'shrub', alpha: 0.84 },
+      { id: 'prayer_stone', x: 7, y: 12, kind: 'prayer_stone', alpha: 0.92 },
+      { id: 'road_watchers', x: 15, y: 8, kind: 'watcher_pair', alpha: 0.65 },
     ],
     exits: [
       {
@@ -308,6 +334,14 @@ export const MAPS: Record<string, MapDefinition> = {
     objects: [
       { id: 'city_banner_left', x: 6, y: 4, kind: 'banner', event: 'dialogue:gate_banner' },
       { id: 'city_banner_right', x: 13, y: 4, kind: 'banner', event: 'dialogue:gate_banner' },
+    ],
+    decorations: [
+      { id: 'column_left', x: 5, y: 4, kind: 'column', scale: 1.05 },
+      { id: 'column_right', x: 14, y: 4, kind: 'column', scale: 1.05 },
+      { id: 'brazier_left', x: 6, y: 8, kind: 'brazier' },
+      { id: 'brazier_right', x: 13, y: 8, kind: 'brazier' },
+      { id: 'gate_watchers', x: 10, y: 11, kind: 'watcher_pair', alpha: 0.82 },
+      { id: 'grass_citizens', x: 3, y: 13, kind: 'citizen_group', alpha: 0.66 },
     ],
     exits: [
       {
@@ -369,6 +403,14 @@ export const MAPS: Record<string, MapDefinition> = {
       { id: 'banner_r', x: 15, y: 5, kind: 'banner' },
       { id: 'market_l', x: 5, y: 11, kind: 'market' },
       { id: 'market_r', x: 14, y: 11, kind: 'market' },
+      { id: 'column_palace_l', x: 8, y: 2, kind: 'column', scale: 1.05 },
+      { id: 'column_palace_r', x: 12, y: 2, kind: 'column', scale: 1.05 },
+      { id: 'brazier_palace_l', x: 8, y: 4, kind: 'brazier' },
+      { id: 'brazier_palace_r', x: 12, y: 4, kind: 'brazier' },
+      { id: 'citizens_l', x: 4, y: 8, kind: 'citizen_group', alpha: 0.8 },
+      { id: 'citizens_r', x: 16, y: 9, kind: 'citizen_group', alpha: 0.8 },
+      { id: 'awning_l', x: 5, y: 10, kind: 'awning', scale: 1.08, alpha: 0.9 },
+      { id: 'awning_r', x: 15, y: 10, kind: 'awning', scale: 1.08, alpha: 0.9 },
     ],
     exits: [
       {
@@ -428,6 +470,11 @@ export const MAPS: Record<string, MapDefinition> = {
     decorations: [
       { id: 'sun_marker', x: 16, y: 2, kind: 'sun_mark' },
       { id: 'city_silhouette', x: 4, y: 1, kind: 'city_far', depthOffset: -20 },
+      { id: 'shrub_hill_a', x: 5, y: 5, kind: 'shrub', alpha: 0.8 },
+      { id: 'shrub_hill_b', x: 15, y: 8, kind: 'shrub', alpha: 0.74 },
+      { id: 'cairn_hill_a', x: 6, y: 11, kind: 'cairn' },
+      { id: 'cairn_hill_b', x: 13, y: 3, kind: 'cairn' },
+      { id: 'prayer_stone_hill', x: 10, y: 12, kind: 'prayer_stone', alpha: 0.88 },
     ],
   },
 };

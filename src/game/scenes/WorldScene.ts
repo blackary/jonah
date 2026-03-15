@@ -5,6 +5,7 @@ import type { GameApp } from '../GameApp';
 import type {
   Direction,
   MapActor,
+  MapDecoration,
   MapDefinition,
   MapObject,
 } from '../types';
@@ -29,6 +30,13 @@ interface ActiveObject {
   sprite: Phaser.GameObjects.Image;
 }
 
+interface ActiveDecoration {
+  data: MapDecoration;
+  sprite: Phaser.GameObjects.Image;
+  baseX: number;
+  baseY: number;
+}
+
 export class WorldScene extends Phaser.Scene {
   private currentMap?: MapDefinition;
 
@@ -36,11 +44,17 @@ export class WorldScene extends Phaser.Scene {
 
   private decorationLayer?: Phaser.GameObjects.Container;
 
+  private foregroundLayer?: Phaser.GameObjects.Container;
+
   private objectLayer?: Phaser.GameObjects.Container;
 
   private actorLayer?: Phaser.GameObjects.Container;
 
   private ambientLayer?: Phaser.GameObjects.Container;
+
+  private effectLayer?: Phaser.GameObjects.Container;
+
+  private moodOverlay?: Phaser.GameObjects.Image;
 
   private player?: Phaser.GameObjects.Sprite;
 
@@ -49,6 +63,8 @@ export class WorldScene extends Phaser.Scene {
   private readonly objectSprites = new Map<string, ActiveObject>();
 
   private readonly ambientSprites: Phaser.GameObjects.Image[] = [];
+
+  private readonly animatedDecorations: ActiveDecoration[] = [];
 
   private moving = false;
 
@@ -73,6 +89,8 @@ export class WorldScene extends Phaser.Scene {
     this.decorationLayer = this.add.container();
     this.objectLayer = this.add.container();
     this.actorLayer = this.add.container();
+    this.foregroundLayer = this.add.container();
+    this.effectLayer = this.add.container();
 
     this.cursors = this.input.keyboard?.createCursorKeys();
     this.keys = this.input.keyboard?.addKeys('W,A,S,D,Z,X,ENTER,SPACE,ESC') as Record<
@@ -149,9 +167,13 @@ export class WorldScene extends Phaser.Scene {
     this.decorationLayer?.removeAll(true);
     this.objectLayer?.removeAll(true);
     this.actorLayer?.removeAll(true);
+    this.foregroundLayer?.removeAll(true);
+    this.effectLayer?.removeAll(true);
     this.actorSprites.clear();
     this.objectSprites.clear();
     this.ambientSprites.length = 0;
+    this.animatedDecorations.length = 0;
+    this.moodOverlay = undefined;
     this.player = undefined;
 
     this.buildTiles(map);
@@ -160,6 +182,7 @@ export class WorldScene extends Phaser.Scene {
     this.buildObjects(map);
     this.buildActors(map);
     this.buildPlayer(save.player.x, save.player.y, save.player.facing);
+    this.buildMoodOverlay(map.theme);
     this.refreshFromSave();
 
     this.cameras.main.centerOn(FRAME_WIDTH / 2, FRAME_HEIGHT / 2);
@@ -257,29 +280,109 @@ export class WorldScene extends Phaser.Scene {
   }
 
   private buildAmbient(theme: string): void {
-    const colorByTheme: Record<string, number> = {
-      harbor: 0xe9d7aa,
-      storm: 0xd8ecf7,
-      fish: 0x8df4e2,
-      desert: 0xf7d28a,
-      gate: 0xd5d6dc,
-      city: 0xf2e0b9,
-      hillside: 0xf4c66a,
+    const ambientByTheme: Record<
+      string,
+      {
+        texture: string;
+        tint: number;
+        count: number;
+        minAlpha: number;
+        alphaSpread: number;
+        minScale: number;
+        scaleSpread: number;
+        minX?: number;
+        maxX?: number;
+        minY?: number;
+        maxY?: number;
+      }
+    > = {
+      harbor: {
+        texture: 'particle-gull',
+        tint: 0xf2dfb6,
+        count: 8,
+        minAlpha: 0.11,
+        alphaSpread: 0.1,
+        minScale: 0.36,
+        scaleSpread: 0.18,
+        minY: 12,
+        maxY: 132,
+      },
+      storm: {
+        texture: 'particle-rain',
+        tint: 0xe0f2fb,
+        count: 24,
+        minAlpha: 0.32,
+        alphaSpread: 0.22,
+        minScale: 0.55,
+        scaleSpread: 0.4,
+      },
+      fish: {
+        texture: 'particle-bubble',
+        tint: 0x9ef9ee,
+        count: 18,
+        minAlpha: 0.18,
+        alphaSpread: 0.22,
+        minScale: 0.7,
+        scaleSpread: 0.5,
+      },
+      desert: {
+        texture: 'particle-dust',
+        tint: 0xf5d08f,
+        count: 16,
+        minAlpha: 0.14,
+        alphaSpread: 0.16,
+        minScale: 0.7,
+        scaleSpread: 0.45,
+      },
+      gate: {
+        texture: 'particle-mote',
+        tint: 0xf0dbc0,
+        count: 12,
+        minAlpha: 0.08,
+        alphaSpread: 0.12,
+        minScale: 0.8,
+        scaleSpread: 0.4,
+      },
+      city: {
+        texture: 'particle-mote',
+        tint: 0xeccf9b,
+        count: 14,
+        minAlpha: 0.08,
+        alphaSpread: 0.14,
+        minScale: 0.8,
+        scaleSpread: 0.45,
+      },
+      hillside: {
+        texture: 'particle-dust',
+        tint: 0xf3c770,
+        count: 16,
+        minAlpha: 0.13,
+        alphaSpread: 0.15,
+        minScale: 0.7,
+        scaleSpread: 0.45,
+      },
     };
+    const config = ambientByTheme[theme] ?? ambientByTheme.harbor;
 
-    for (let index = 0; index < 18; index += 1) {
+    for (let index = 0; index < config.count; index += 1) {
       const sprite = this.add.image(
-        Phaser.Math.Between(0, FRAME_WIDTH),
-        Phaser.Math.Between(0, FRAME_HEIGHT),
-        'particle',
+        Phaser.Math.Between(config.minX ?? 0, config.maxX ?? FRAME_WIDTH),
+        Phaser.Math.Between(config.minY ?? 0, config.maxY ?? FRAME_HEIGHT),
+        config.texture,
       );
-      sprite.setTint(colorByTheme[theme] ?? 0xffffff);
-      sprite.setAlpha(theme === 'storm' ? 0.5 : 0.22 + Math.random() * 0.3);
-      sprite.setScale(theme === 'storm' ? 0.5 : 0.7 + Math.random() * 0.8);
+      sprite.setTint(config.tint);
+      sprite.setAlpha(config.minAlpha + Math.random() * config.alphaSpread);
+      sprite.setScale(config.minScale + Math.random() * config.scaleSpread);
       sprite.setDepth(1);
       this.ambientLayer?.add(sprite);
       this.ambientSprites.push(sprite);
     }
+  }
+
+  private buildMoodOverlay(theme: string): void {
+    this.moodOverlay = this.add.image(FRAME_WIDTH / 2, FRAME_HEIGHT / 2, `mood-${theme}`);
+    this.moodOverlay.setDepth(5);
+    this.effectLayer?.add(this.moodOverlay);
   }
 
   private buildDecorations(map: MapDefinition): void {
@@ -290,7 +393,21 @@ export class WorldScene extends Phaser.Scene {
         `object-${decoration.kind}`,
       );
       image.setDepth(decoration.y * 10 + (decoration.depthOffset ?? 1));
-      this.decorationLayer?.add(image);
+      image.setScale(decoration.scale ?? 1);
+      image.setAlpha(decoration.alpha ?? 1);
+      if (decoration.layer === 'foreground') {
+        this.foregroundLayer?.add(image);
+      } else {
+        this.decorationLayer?.add(image);
+      }
+      if (decoration.bobAmplitude) {
+        this.animatedDecorations.push({
+          data: decoration,
+          sprite: image,
+          baseX: image.x,
+          baseY: image.y,
+        });
+      }
     });
   }
 
@@ -360,6 +477,41 @@ export class WorldScene extends Phaser.Scene {
           sprite.x += Math.cos(time / 1200 + index) * 0.05;
       }
     });
+
+    this.animatedDecorations.forEach(({ data, sprite, baseX, baseY }, index) => {
+      const speed = data.bobSpeed ?? 1400;
+      const amplitude = data.bobAmplitude ?? 1;
+      sprite.x = baseX + Math.cos(time / (speed * 0.72) + index) * amplitude * 0.35;
+      sprite.y = baseY + Math.sin(time / speed + index * 0.45) * amplitude;
+    });
+
+    if (!this.moodOverlay) {
+      return;
+    }
+
+    const baseAlphaByTheme: Record<string, number> = {
+      harbor: 0.5,
+      storm: 0.68,
+      fish: 0.58,
+      desert: 0.44,
+      gate: 0.5,
+      city: 0.46,
+      hillside: 0.48,
+    };
+    const pulseByTheme: Record<string, number> = {
+      harbor: 0.018,
+      storm: 0.05,
+      fish: 0.04,
+      desert: 0.014,
+      gate: 0.012,
+      city: 0.012,
+      hillside: 0.016,
+    };
+    const theme = this.currentMap.theme;
+    this.moodOverlay.setAlpha(
+      (baseAlphaByTheme[theme] ?? 0.42) +
+        Math.sin(time / (theme === 'storm' ? 760 : theme === 'fish' ? 1100 : 2400)) * (pulseByTheme[theme] ?? 0.01),
+    );
   }
 
   private resolveObjectTexture(object: MapObject): string {
