@@ -1,131 +1,12 @@
-import { readFileSync } from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
-
-type Snapshot = {
-  mode: 'title' | 'world';
-  overlayDepth: number;
-  save: {
-    map: string;
-    player: { x: number; y: number };
-    flags: Record<string, boolean | number | string>;
-  } | null;
-};
-
-const questions = JSON.parse(
-  readFileSync(new URL('../../src/game/content/trivia/questions.json', import.meta.url), 'utf8'),
-) as Array<{
-  prompt: string;
-  choices: string[];
-  answerIndex: number;
-}>;
-
-const answers = new Map(questions.map((question) => [question.prompt, question.choices[question.answerIndex]]));
-
-async function getSnapshot(page: Page): Promise<Snapshot> {
-  return page.evaluate(() => window.__JONAH__?.getSnapshot() as Snapshot);
-}
-
-async function waitForMap(page: Page, mapId: string): Promise<void> {
-  await page.waitForFunction(
-    (expectedMap) => window.__JONAH__?.getSnapshot().save?.map === expectedMap,
-    mapId,
-  );
-}
-
-async function waitForFlag(
-  page: Page,
-  flag: string,
-  expected: boolean | number | string,
-): Promise<void> {
-  await page.waitForFunction(
-    ({ nextFlag, nextExpected }) =>
-      window.__JONAH__?.getSnapshot().save?.flags?.[nextFlag] === nextExpected,
-    { nextFlag: flag, nextExpected: expected },
-  );
-}
-
-async function resolveOverlays(page: Page, pendingChoices: string[] = []): Promise<void> {
-  for (let safety = 0; safety < 160; safety += 1) {
-    const dialogue = page.getByTestId('dialogue-panel');
-    const trivia = page.getByTestId('trivia-panel');
-    const modal = page.getByTestId('modal');
-
-    if (await dialogue.isVisible()) {
-      if (pendingChoices.length > 0) {
-        const choice = page.getByRole('button', { name: pendingChoices[0] });
-        if (await choice.isVisible().catch(() => false)) {
-          await choice.click();
-          pendingChoices.shift();
-          continue;
-        }
-      }
-      await page.getByTestId('dialogue-next').click();
-      continue;
-    }
-
-    if (await trivia.isVisible()) {
-      const prompt = (await page.getByTestId('trivia-prompt').textContent())?.trim() ?? '';
-      const answer = answers.get(prompt);
-      expect(answer, `missing answer for prompt: ${prompt}`).toBeTruthy();
-      await page.getByRole('button', { name: answer! }).click();
-      continue;
-    }
-
-    if (await modal.isVisible()) {
-      await page.locator('.modal-actions button').first().click();
-      continue;
-    }
-
-    const snapshot = await getSnapshot(page);
-    if (snapshot.overlayDepth > 0) {
-      await page.waitForTimeout(100);
-      continue;
-    }
-
-    break;
-  }
-}
-
-async function runScript(
-  page: Page,
-  scriptId: string,
-  source: { kind: 'actor' | 'object' | 'trigger' | 'map'; actorId?: string; objectId?: string } = { kind: 'map' },
-  pendingChoices: string[] = [],
-): Promise<void> {
-  await page.evaluate(
-    ([nextScriptId, nextSource]) => {
-      void window.__JONAH__?.debugRunScript(nextScriptId, nextSource);
-    },
-    [scriptId, source] as const,
-  );
-  await page
-    .waitForFunction(() => {
-      const snapshot = window.__JONAH__?.getSnapshot() as Snapshot | undefined;
-      return Boolean(snapshot && snapshot.overlayDepth > 0);
-    }, { timeout: 2_000 })
-    .catch(() => undefined);
-  await resolveOverlays(page, pendingChoices);
-  await page
-    .waitForFunction(
-      () => {
-        const snapshot = window.__JONAH__?.getSnapshot() as Snapshot | undefined;
-        return Boolean(snapshot && snapshot.overlayDepth === 0);
-      },
-      { timeout: 10_000 },
-    )
-    .catch(() => undefined);
-}
-
-async function runQuietScript(
-  page: Page,
-  scriptId: string,
-  source: { kind: 'actor' | 'object' | 'trigger' | 'map'; actorId?: string; objectId?: string } = { kind: 'map' },
-): Promise<void> {
-  await page.evaluate(
-    ([nextScriptId, nextSource]) => window.__JONAH__?.debugRunScript(nextScriptId, nextSource),
-    [scriptId, source] as const,
-  );
-}
+import { expect, test } from '@playwright/test';
+import {
+  getSnapshot,
+  resolveOverlays,
+  runQuietScript,
+  runScript,
+  waitForFlag,
+  waitForMap,
+} from './support';
 
 test('plays from title through the fish release and onto the coast road', async ({ page }) => {
   await page.goto('/');
@@ -181,7 +62,6 @@ test('shows desktop guidance and keeps touch controls hidden in desktop browsers
   await page.getByTestId('title-screen').waitFor();
   await expect(page.getByTestId('desktop-legend')).toBeVisible();
   await expect(page.getByTestId('mobile-controls')).toBeHidden();
-  await page.getByTestId('title-new').focus();
-  await page.keyboard.press('Enter');
+  await page.getByTestId('title-new').click();
   await page.waitForFunction(() => window.__JONAH__?.getSnapshot().mode === 'world');
 });

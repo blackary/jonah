@@ -35,4 +35,34 @@ describe('meetsRequirements', () => {
       ),
     ).toBe(false);
   });
+
+  it('rejects forbidden flags and inventory items', () => {
+    const save = createInitialSave();
+    save.flags.enteredNineveh = true;
+    save.inventory.push('water_flask');
+
+    expect(
+      meetsRequirements(
+        {
+          notFlags: ['enteredNineveh'],
+          lacksItems: ['water_flask'],
+        },
+        save,
+      ),
+    ).toBe(false);
+  });
+
+  it('rejects mismatched exact values', () => {
+    const save = createInitialSave();
+    save.flags.fareQuestStep = 3;
+
+    expect(
+      meetsRequirements(
+        {
+          values: { fareQuestStep: 2 },
+        },
+        save,
+      ),
+    ).toBe(false);
+  });
 });
