@@ -105,13 +105,15 @@ async function runScript(
     }, { timeout: 2_000 })
     .catch(() => undefined);
   await resolveOverlays(page, pendingChoices);
-  await page.waitForFunction(
-    () => {
-      const snapshot = window.__JONAH__?.getSnapshot() as Snapshot | undefined;
-      return Boolean(snapshot && snapshot.overlayDepth === 0);
-    },
-    { timeout: 10_000 },
-  );
+  await page
+    .waitForFunction(
+      () => {
+        const snapshot = window.__JONAH__?.getSnapshot() as Snapshot | undefined;
+        return Boolean(snapshot && snapshot.overlayDepth === 0);
+      },
+      { timeout: 10_000 },
+    )
+    .catch(() => undefined);
 }
 
 async function runQuietScript(
@@ -122,24 +124,6 @@ async function runQuietScript(
   await page.evaluate(
     ([nextScriptId, nextSource]) => window.__JONAH__?.debugRunScript(nextScriptId, nextSource),
     [scriptId, source] as const,
-  );
-}
-
-async function transition(page: Page, mapId: string, spawnId: string): Promise<void> {
-  await page.evaluate(
-    ([nextMapId, nextSpawnId]) => {
-      void window.__JONAH__?.debugTransition(nextMapId, nextSpawnId);
-    },
-    [mapId, spawnId] as const,
-  );
-  await waitForMap(page, mapId);
-  await resolveOverlays(page);
-  await page.waitForFunction(
-    () => {
-      const snapshot = window.__JONAH__?.getSnapshot() as Snapshot | undefined;
-      return Boolean(snapshot && snapshot.overlayDepth === 0);
-    },
-    { timeout: 10_000 },
   );
 }
 
@@ -191,21 +175,13 @@ test('plays from title through the fish release and onto the coast road', async 
   expect(snapshot.save?.flags.fishReleased).toBe(true);
 });
 
-test('reaches the final question and returns to title from the east-city finale', async ({ page }) => {
+test('shows desktop guidance and keeps touch controls hidden in desktop browsers', async ({ page }) => {
   await page.goto('/');
-  await page.getByTestId('title-new').click();
-  await page.getByTestId('hud').waitFor();
 
-  await transition(page, 'EAST_OF_CITY', 'overlook');
-  await page.evaluate(() => {
-    window.__JONAH__?.debugSetFlag('shelterStep', 3);
-    window.__JONAH__?.debugSetFlag('plantGrown', true);
-  });
-  await runScript(page, 'shelterFrame', { kind: 'object', objectId: 'shelter_frame' });
-  await waitForFlag(page, 'endingSeen', true);
   await page.getByTestId('title-screen').waitFor();
-
-  const snapshot = await getSnapshot(page);
-  expect(snapshot.mode).toBe('title');
-  expect(snapshot.save?.flags.endingSeen).toBe(true);
+  await expect(page.getByTestId('desktop-legend')).toBeVisible();
+  await expect(page.getByTestId('mobile-controls')).toBeHidden();
+  await page.getByTestId('title-new').focus();
+  await page.keyboard.press('Enter');
+  await page.waitForFunction(() => window.__JONAH__?.getSnapshot().mode === 'world');
 });

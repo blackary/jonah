@@ -136,6 +136,14 @@ select {
   line-height: 1.5;
 }
 
+.desktop-legend,
+.desktop-inline-hint {
+  margin: 14px 0 0;
+  color: #e7d6a8;
+  line-height: 1.45;
+  font-size: 0.95rem;
+}
+
 .title-actions,
 .modal-actions,
 .dialogue-actions,
@@ -159,6 +167,12 @@ select {
   transform: translateY(-1px);
   background: rgba(255, 244, 216, 0.12);
   border-color: rgba(243, 216, 146, 0.6);
+}
+
+.ui-button:focus-visible,
+.mobile-button:focus-visible {
+  outline: 2px solid rgba(240, 201, 110, 0.95);
+  outline-offset: 2px;
 }
 
 .ui-button:disabled {
@@ -326,6 +340,19 @@ select {
   }
 }
 
+@media (pointer: fine) {
+  .mobile-controls {
+    display: none;
+  }
+}
+
+@media (pointer: coarse) {
+  .desktop-legend,
+  .desktop-inline-hint {
+    display: none;
+  }
+}
+
 @media (max-width: 680px) {
   .app-shell {
     padding: 10px;
@@ -352,5 +379,9 @@ select {
     right: 10px;
     bottom: 10px;
     max-width: none;
+  }
+
+  .desktop-inline-hint {
+    display: none;
   }
 }

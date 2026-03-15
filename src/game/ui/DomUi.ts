@@ -32,6 +32,8 @@ export class DomUi {
 
   private readonly titleScreen: HTMLElement;
 
+  private readonly titleActions: HTMLElement;
+
   private readonly titleMeta: HTMLElement;
 
   private readonly continueButton: HTMLButtonElement;
@@ -96,6 +98,9 @@ export class DomUi {
               <button class="ui-button" data-action="settings" data-testid="title-settings">Settings</button>
               <button class="ui-button" data-action="credits" data-testid="title-credits">Credits</button>
             </div>
+            <p class="desktop-legend" data-testid="desktop-legend">
+              Desktop: move with WASD or arrows, use Space / Enter / Z to confirm, and Esc for pause.
+            </p>
             <p class="title-meta" data-testid="title-meta"></p>
           </div>
         </section>
@@ -116,6 +121,7 @@ export class DomUi {
             <p class="hud-label">Objective</p>
             <p class="objective-text" data-testid="hud-objective"></p>
             <p class="inventory-text" data-testid="hud-inventory"></p>
+            <p class="desktop-inline-hint">Desktop controls: WASD / arrows to move, Space / Enter / Z to act.</p>
           </div>
         </section>
 
@@ -162,6 +168,7 @@ export class DomUi {
     `;
 
     this.titleScreen = this.require('.title-screen');
+    this.titleActions = this.require('.title-actions');
     this.titleMeta = this.require('.title-meta');
     this.continueButton = this.require<HTMLButtonElement>('[data-action="continue"]');
     this.hud = this.require('.hud');
@@ -187,6 +194,10 @@ export class DomUi {
 
     this.bindStaticActions();
     this.bindMobileControls();
+    this.bindKeyboardGrid(this.titleActions);
+    this.bindKeyboardGrid(this.dialogueActions);
+    this.bindKeyboardGrid(this.triviaChoices);
+    this.bindKeyboardGrid(this.modalActions);
   }
 
   showTitle(canContinue: boolean, settings: SettingsState): void {
@@ -198,6 +209,7 @@ export class DomUi {
     )} · Music: ${settings.musicEnabled ? 'On' : 'Off'} · SFX: ${
       settings.sfxEnabled ? 'On' : 'Off'
     }`;
+    this.focusFirstAction(this.titleActions);
   }
 
   hideTitle(): void {
@@ -242,6 +254,7 @@ export class DomUi {
     this.dialogueActions.replaceChildren(
       this.createButton('Next', 'dialogue-next', true, () => undefined),
     );
+    this.focusFirstAction(this.dialogueActions);
 
     await this.waitForClick(this.dialogueActions.querySelector('button') as HTMLButtonElement);
     this.dialoguePanel.classList.add('hidden');
@@ -268,6 +281,7 @@ export class DomUi {
         );
         this.dialogueActions.append(button);
       });
+      this.focusFirstAction(this.dialogueActions);
     });
   }
 
@@ -293,6 +307,7 @@ export class DomUi {
         button.classList.add('wide');
         this.triviaChoices.append(button);
       });
+      this.focusFirstAction(this.triviaChoices);
     });
   }
 
@@ -320,6 +335,7 @@ export class DomUi {
         );
         this.modalActions.append(button);
       });
+      this.focusFirstAction(this.modalActions);
     });
   }
 
@@ -346,6 +362,73 @@ export class DomUi {
       button.addEventListener('pointerup', release);
       button.addEventListener('pointercancel', release);
       button.addEventListener('pointerleave', release);
+    });
+  }
+
+  private bindKeyboardGrid(container: HTMLElement): void {
+    container.addEventListener('keydown', (event) => {
+      const buttons = Array.from(
+        container.querySelectorAll<HTMLButtonElement>('button:not(:disabled)'),
+      );
+      if (buttons.length === 0) {
+        return;
+      }
+
+      const activeElement = document.activeElement;
+      const currentIndex = Math.max(
+        0,
+        buttons.findIndex((button) => button === activeElement),
+      );
+
+      const focusAt = (index: number): void => {
+        const wrapped = (index + buttons.length) % buttons.length;
+        buttons[wrapped].focus();
+      };
+
+      if (/^Digit[1-9]$/.test(event.code) || /^Numpad[1-9]$/.test(event.code)) {
+        const requestedIndex = Number(event.code.at(-1)) - 1;
+        const button = buttons[requestedIndex];
+        if (button) {
+          event.preventDefault();
+          button.click();
+        }
+        return;
+      }
+
+      switch (event.code) {
+        case 'ArrowUp':
+        case 'ArrowLeft':
+        case 'KeyW':
+        case 'KeyA':
+          event.preventDefault();
+          focusAt(currentIndex - 1);
+          break;
+        case 'ArrowDown':
+        case 'ArrowRight':
+        case 'KeyS':
+        case 'KeyD':
+          event.preventDefault();
+          focusAt(currentIndex + 1);
+          break;
+        case 'Home':
+          event.preventDefault();
+          focusAt(0);
+          break;
+        case 'End':
+          event.preventDefault();
+          focusAt(buttons.length - 1);
+          break;
+        case 'KeyZ':
+          event.preventDefault();
+          buttons[currentIndex].click();
+          break;
+      }
+    });
+  }
+
+  private focusFirstAction(container: HTMLElement): void {
+    window.requestAnimationFrame(() => {
+      container.querySelector<HTMLButtonElement>('button:not(:disabled)')?.focus();
     });
   }
 

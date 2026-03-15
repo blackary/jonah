@@ -91,6 +91,7 @@ export class GameApp {
     });
 
     this.game.canvas?.setAttribute('tabindex', '0');
+    this.focusGameSurface();
   }
 
   registerBootScene(): void {
@@ -144,6 +145,7 @@ export class GameApp {
     this.ui.hideTitle();
     this.game.scene.stop('title');
     this.game.scene.start('world');
+    this.focusGameSurface();
   }
 
   async continueGame(): Promise<void> {
@@ -156,6 +158,7 @@ export class GameApp {
     this.ui.hideTitle();
     this.game.scene.stop('title');
     this.game.scene.start('world');
+    this.focusGameSurface();
   }
 
   async debugStartNewGame(): Promise<void> {
@@ -350,7 +353,16 @@ export class GameApp {
       return await callback();
     } finally {
       this.overlayDepth = Math.max(0, this.overlayDepth - 1);
+      if (this.mode === 'world') {
+        this.focusGameSurface();
+      }
     }
+  }
+
+  private focusGameSurface(): void {
+    window.requestAnimationFrame(() => {
+      this.game.canvas?.focus();
+    });
   }
 
   private async playDialogue(dialogueId: string): Promise<DialogueOutcome> {
