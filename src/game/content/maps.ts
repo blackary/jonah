@@ -161,7 +161,7 @@ export const MAPS: Record<string, MapDefinition> = {
       '~': 'bile',
     },
     spawns: {
-      swallowed: { x: 10, y: 9, facing: 'up' },
+      swallowed: { x: 10, y: 11, facing: 'up' },
     },
     npcs: [],
     objects: [

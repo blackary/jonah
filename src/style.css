@@ -1,0 +1,356 @@
+:root {
+  color-scheme: light;
+  --bg-top: #171d26;
+  --bg-bottom: #65462f;
+  --frame: #d9b778;
+  --frame-dark: #7a5631;
+  --ink: #f7e9c3;
+  --muted: #ccb68a;
+  --panel: rgba(18, 14, 20, 0.82);
+  --panel-strong: rgba(25, 18, 24, 0.92);
+  --accent: #c46f3f;
+  --accent-soft: #f0c96e;
+  --success: #70b77a;
+  --warning: #d9a34e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  font-family: Georgia, 'Times New Roman', serif;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(244, 196, 108, 0.28), transparent 26%),
+    radial-gradient(circle at 80% 15%, rgba(105, 146, 190, 0.18), transparent 22%),
+    linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+  color: var(--ink);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.stage-frame {
+  position: relative;
+  width: min(100%, 920px);
+  aspect-ratio: 4 / 3;
+  border: 4px solid var(--frame);
+  border-radius: 24px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.32)),
+    linear-gradient(180deg, #1b2430, #443124);
+  box-shadow:
+    0 28px 90px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 3px var(--frame-dark);
+}
+
+.game-root,
+.ui-root {
+  position: absolute;
+  inset: 0;
+}
+
+.ui-root,
+.ui-frame {
+  pointer-events: none;
+}
+
+.game-root canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.ui-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.title-screen,
+.modal {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: linear-gradient(180deg, rgba(10, 12, 16, 0.12), rgba(11, 10, 13, 0.55));
+  pointer-events: auto;
+}
+
+.title-card,
+.modal-card {
+  width: min(100%, 560px);
+  padding: 28px;
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(55, 38, 27, 0.92), rgba(28, 20, 18, 0.94)),
+    var(--panel-strong);
+  border: 2px solid rgba(240, 201, 110, 0.45);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.32);
+}
+
+.title-kicker,
+.trivia-kicker,
+.hud-label {
+  margin: 0 0 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.title-card h1,
+.modal-title {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  line-height: 0.94;
+}
+
+.title-copy,
+.modal-body p {
+  color: #f2dfb2;
+  line-height: 1.5;
+}
+
+.title-actions,
+.modal-actions,
+.dialogue-actions,
+.trivia-choices {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.ui-button {
+  border: 1px solid rgba(243, 216, 146, 0.38);
+  background: rgba(255, 244, 216, 0.07);
+  color: var(--ink);
+  padding: 12px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 120ms ease, background-color 120ms ease, border-color 120ms ease;
+}
+
+.ui-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: rgba(255, 244, 216, 0.12);
+  border-color: rgba(243, 216, 146, 0.6);
+}
+
+.ui-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.ui-button.accent {
+  background: linear-gradient(180deg, var(--accent), #9f4529);
+  border-color: rgba(255, 222, 161, 0.55);
+}
+
+.ui-button.small {
+  padding: 8px 14px;
+  font-size: 0.9rem;
+}
+
+.ui-button.wide {
+  width: 100%;
+}
+
+.title-meta,
+.inventory-text,
+.trivia-meta {
+  margin: 14px 0 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.hud {
+  position: absolute;
+  inset: 16px 16px auto 16px;
+  display: grid;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.hud-strip,
+.objective-card,
+.dialogue-panel,
+.trivia-panel,
+.toast {
+  background: var(--panel);
+  border: 1px solid rgba(243, 216, 146, 0.28);
+  border-radius: 18px;
+  backdrop-filter: blur(8px);
+}
+
+.hud-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  padding: 12px 16px;
+}
+
+.hud-value {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.objective-card {
+  padding: 14px 16px;
+}
+
+.objective-text {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.chapter-banner {
+  position: absolute;
+  left: 50%;
+  top: 18px;
+  transform: translateX(-50%);
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: rgba(19, 15, 18, 0.9);
+  border: 1px solid rgba(243, 216, 146, 0.45);
+  color: #f1dfb2;
+  pointer-events: auto;
+}
+
+.dialogue-panel,
+.trivia-panel {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  padding: 18px 20px;
+  pointer-events: auto;
+}
+
+.dialogue-speaker {
+  margin: 0 0 8px;
+  color: var(--accent-soft);
+  font-weight: 700;
+}
+
+.dialogue-text,
+.trivia-prompt {
+  margin: 0;
+  line-height: 1.5;
+  font-size: 1.06rem;
+}
+
+.toast {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  max-width: 320px;
+  padding: 12px 16px;
+  pointer-events: auto;
+}
+
+.toast.success {
+  border-color: rgba(112, 183, 122, 0.5);
+}
+
+.toast.warning {
+  border-color: rgba(217, 163, 78, 0.5);
+}
+
+.mobile-controls {
+  position: absolute;
+  inset: auto 12px 12px 12px;
+  display: none;
+  justify-content: space-between;
+  align-items: end;
+  pointer-events: none;
+}
+
+.mobile-dpad,
+.mobile-actions {
+  display: grid;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.mobile-row {
+  display: flex;
+  gap: 10px;
+}
+
+.mobile-button {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  border: 1px solid rgba(243, 216, 146, 0.38);
+  background: rgba(17, 12, 19, 0.72);
+  color: var(--ink);
+  font-size: 1.2rem;
+}
+
+.mobile-button.action {
+  width: 84px;
+}
+
+@media (pointer: coarse), (max-width: 900px) {
+  .mobile-controls {
+    display: flex;
+  }
+
+  .stage-frame {
+    border-radius: 18px;
+  }
+}
+
+@media (max-width: 680px) {
+  .app-shell {
+    padding: 10px;
+  }
+
+  .title-card,
+  .modal-card {
+    padding: 22px;
+  }
+
+  .hud {
+    inset: 10px 10px auto 10px;
+  }
+
+  .dialogue-panel,
+  .trivia-panel {
+    left: 10px;
+    right: 10px;
+    bottom: 88px;
+  }
+
+  .toast {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    max-width: none;
+  }
+}
