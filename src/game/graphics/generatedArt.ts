@@ -223,11 +223,18 @@ export function generateArt(scene: Phaser.Scene): void {
     fill(ctx, '#fff7de', 4, 1, 2, 1);
   });
 
-  createTexture(scene, 'ui-marker', 12, 12, (ctx) => {
-    fill(ctx, '#7a4e20', 5, 0, 2, 2);
-    fill(ctx, '#d9ae62', 4, 2, 4, 4);
-    fill(ctx, '#f5df9a', 3, 5, 6, 4);
-    fill(ctx, '#7a4e20', 4, 9, 4, 2);
+  createTexture(scene, 'ui-marker', 16, 18, (ctx) => {
+    fill(ctx, 'rgba(48,26,9,0.22)', 5, 15, 6, 2);
+    fill(ctx, '#6f4420', 3, 1, 10, 9);
+    fill(ctx, '#6f4420', 5, 10, 6, 2);
+    fill(ctx, '#6f4420', 6, 12, 4, 2);
+    fill(ctx, '#d7ab62', 4, 2, 8, 7);
+    fill(ctx, '#f6e2a0', 5, 3, 6, 5);
+    fill(ctx, '#fff3c8', 5, 3, 2, 1);
+    fill(ctx, '#6f4420', 7, 4, 2, 3);
+    fill(ctx, '#6f4420', 7, 8, 2, 2);
+    fill(ctx, '#f1d28b', 6, 10, 4, 1);
+    fill(ctx, '#f1d28b', 7, 11, 2, 1);
   });
 
   createTexture(scene, 'mood-harbor', 640, 480, (ctx, width, height) => {

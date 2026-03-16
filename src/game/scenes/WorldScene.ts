@@ -571,11 +571,11 @@ export class WorldScene extends Phaser.Scene {
       }
 
       const objective = objectiveTargets.has(`actor:${data.id}`);
-      indicator.setPosition(sprite.x, sprite.y - 30 - Math.sin(time / 220 + offsetIndex) * 1.8);
+      indicator.setPosition(sprite.x, sprite.y - 34 - Math.sin(time / 260 + offsetIndex) * 2.2);
       indicator.setDepth(sprite.depth + 20);
       indicator.setTint(objective ? 0xffe3a3 : 0xc78a43);
-      indicator.setAlpha(objective ? 0.96 : 0.62);
-      indicator.setScale(objective ? 1 : 0.84);
+      indicator.setAlpha(objective ? 0.98 : 0.76);
+      indicator.setScale(objective ? 1.08 : 0.94);
     });
 
     let objectIndex = 0;
@@ -589,11 +589,11 @@ export class WorldScene extends Phaser.Scene {
       }
 
       const objective = objectiveTargets.has(`object:${data.id}`);
-      indicator.setPosition(sprite.x, sprite.y - 24 - Math.sin(time / 220 + offsetIndex + 2) * 1.6);
+      indicator.setPosition(sprite.x, sprite.y - 28 - Math.sin(time / 260 + offsetIndex + 2) * 2);
       indicator.setDepth(sprite.depth + 20);
       indicator.setTint(objective ? 0xffe3a3 : 0xc78a43);
-      indicator.setAlpha(objective ? 0.96 : 0.62);
-      indicator.setScale(objective ? 1 : 0.84);
+      indicator.setAlpha(objective ? 0.98 : 0.76);
+      indicator.setScale(objective ? 1.08 : 0.94);
     });
 
     const nextHint = this.getContextHint(save);
@@ -966,6 +966,7 @@ export class WorldScene extends Phaser.Scene {
 
   private createIndicator(x: number, y: number): Phaser.GameObjects.Image {
     const indicator = this.add.image(x, y, 'ui-marker');
+    indicator.setOrigin(0.5, 1);
     indicator.setDepth(999);
     this.indicatorLayer?.add(indicator);
     return indicator;
