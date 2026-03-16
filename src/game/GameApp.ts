@@ -5,6 +5,8 @@ import { PUZZLES, TRIVIA_GATES } from './content/puzzles';
 import { TRIVIA_QUESTIONS } from './content/trivia';
 import { GameSession } from './runtime/GameSession';
 import { DomUi } from './ui/DomUi';
+import { MusicSystem } from './audio/MusicSystem';
+import { pickCueId } from './audio/score';
 import type {
   DialogueDefinition,
   DialogueLineNode,
@@ -43,6 +45,8 @@ export class GameApp {
 
   private worldScene?: WorldScene;
 
+  private readonly music = new MusicSystem();
+
   constructor(root: HTMLElement) {
     root.innerHTML = `
       <div class="app-shell">
@@ -69,7 +73,15 @@ export class GameApp {
     this.session.subscribe(() => {
       this.refreshHud();
       this.worldScene?.refreshFromSave();
+      this.syncMusic();
     });
+
+    const unlockMusic = () => {
+      this.music.unlock();
+      this.syncMusic();
+    };
+    window.addEventListener('pointerdown', unlockMusic, { passive: true });
+    window.addEventListener('keydown', unlockMusic);
 
     this.game = new Phaser.Game({
       type: Phaser.CANVAS,
@@ -92,6 +104,7 @@ export class GameApp {
 
     this.game.canvas?.setAttribute('tabindex', '0');
     this.focusGameSurface();
+    this.syncMusic();
   }
 
   registerBootScene(): void {
@@ -99,6 +112,7 @@ export class GameApp {
       return;
     }
     this.ui.showTitle(this.session.hasSave(), this.session.getSettings());
+    this.syncMusic();
   }
 
   registerPreloadComplete(): void {
@@ -106,6 +120,7 @@ export class GameApp {
       return;
     }
     this.ui.showTitle(this.session.hasSave(), this.session.getSettings());
+    this.syncMusic();
   }
 
   attachTitleScene(scene: TitleScene): void {
@@ -116,6 +131,7 @@ export class GameApp {
     this.mode = 'title';
     this.ui.hideHud();
     this.ui.showTitle(this.session.hasSave(), this.session.getSettings());
+    this.syncMusic();
   }
 
   attachWorldScene(scene: WorldScene): void {
@@ -138,6 +154,10 @@ export class GameApp {
       save: this.session.getSave() ? structuredClone(this.session.getSave()) : null,
       settings: structuredClone(this.session.getSettings()),
     };
+  }
+
+  debugGetMusicState(): ReturnType<MusicSystem['getState']> {
+    return this.music.getState();
   }
 
   refreshHud(): void {
@@ -164,6 +184,7 @@ export class GameApp {
     this.ui.hideTitle();
     this.game.scene.stop('title');
     this.game.scene.start('world');
+    this.syncMusic();
     this.focusGameSurface();
   }
 
@@ -177,6 +198,7 @@ export class GameApp {
     this.ui.hideTitle();
     this.game.scene.stop('title');
     this.game.scene.start('world');
+    this.syncMusic();
     this.focusGameSurface();
   }
 
@@ -364,6 +386,7 @@ export class GameApp {
     this.game.scene.start('title');
     this.ui.hideHud();
     this.ui.showTitle(this.session.hasSave(), this.session.getSettings());
+    this.syncMusic();
   }
 
   private async runOverlay<T>(callback: () => Promise<T>): Promise<T> {
@@ -382,6 +405,12 @@ export class GameApp {
     window.requestAnimationFrame(() => {
       this.game.canvas?.focus();
     });
+  }
+
+  private syncMusic(): void {
+    const settings = this.session.getSettings();
+    const theme = this.mode === 'world' && this.session.hasSave() ? MAPS[this.session.requireSave().map].theme : undefined;
+    this.music.sync(settings.musicEnabled, pickCueId(this.mode, theme));
   }
 
   private async playDialogue(dialogueId: string): Promise<DialogueOutcome> {

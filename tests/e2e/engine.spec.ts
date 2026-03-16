@@ -34,6 +34,18 @@ test('supports desktop keyboard play, pause settings, save, and continue', async
 
   await page.getByRole('button', { name: /Difficulty: Easy/ }).click();
   await expect(page.getByRole('button', { name: /Difficulty: Normal/ })).toBeVisible();
+  await page.getByRole('button', { name: /Music: On/ }).click();
+  await page.waitForFunction(() => {
+    const state = window.__JONAH__?.debugGetMusicState();
+    return Boolean(state && state.enabled === false && (state.supported ? state.activeCueId === null : true));
+  });
+  await expect(page.getByRole('button', { name: /Music: Off/ })).toBeVisible();
+  await page.getByRole('button', { name: /Music: Off/ }).click();
+  await page.waitForFunction(() => {
+    const state = window.__JONAH__?.debugGetMusicState();
+    return Boolean(state && state.enabled === true && (state.supported ? state.activeCueId === 'pilgrimage' : true));
+  });
+  await expect(page.getByRole('button', { name: /Music: On/ })).toBeVisible();
   await page.getByRole('button', { name: 'Back' }).click();
   await expect(page.getByTestId('modal-title')).toHaveText('Pause');
   await page.getByTestId('pause-title').click();
