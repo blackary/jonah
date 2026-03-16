@@ -107,22 +107,25 @@ export class DomUi {
 
         <section class="hud hidden" data-testid="hud">
           <div class="hud-strip">
-            <div>
+            <div class="hud-block">
               <p class="hud-label">Chapter</p>
               <p class="hud-value" data-testid="hud-chapter"></p>
             </div>
-            <div>
+            <div class="hud-block">
               <p class="hud-label">Location</p>
               <p class="hud-value" data-testid="hud-location"></p>
             </div>
+            <div class="hud-block hud-objective-block">
+              <p class="hud-label">Objective</p>
+              <p class="hud-value objective-inline" data-testid="hud-objective"></p>
+            </div>
+            <div class="hud-block hud-inventory-block">
+              <p class="hud-label">Inventory</p>
+              <p class="hud-value inventory-inline" data-testid="hud-inventory"></p>
+            </div>
             <button class="ui-button small" data-action="pause" data-testid="hud-pause">Pause</button>
           </div>
-          <div class="objective-card">
-            <p class="hud-label">Objective</p>
-            <p class="objective-text" data-testid="hud-objective"></p>
-            <p class="inventory-text" data-testid="hud-inventory"></p>
-            <p class="desktop-inline-hint">Desktop controls: WASD / arrows to move, Space / Enter / Z to act.</p>
-          </div>
+          <p class="desktop-inline-hint">Desktop: WASD / arrows move, Space / Enter / Z act, Esc pauses.</p>
         </section>
 
         <section class="chapter-banner hidden" data-testid="chapter-banner"></section>
@@ -221,9 +224,7 @@ export class DomUi {
     this.hudChapter.textContent = hudState.chapter;
     this.hudLocation.textContent = hudState.location;
     this.hudObjective.textContent = hudState.objective;
-    this.hudInventory.textContent = hudState.inventory.length
-      ? `Inventory: ${hudState.inventory.join(' · ')}`
-      : 'Inventory: empty hands';
+    this.hudInventory.textContent = hudState.inventory.length ? hudState.inventory.join(' · ') : 'Empty hands';
   }
 
   hideHud(): void {

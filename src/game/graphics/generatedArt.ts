@@ -169,6 +169,13 @@ function createCharacterSheet(
     });
   });
 
+  const texture = scene.textures.get(key);
+  if (texture.frameTotal === 1) {
+    for (let frame = 0; frame < 8; frame += 1) {
+      texture.add(frame, 0, frame * 20, 0, 20, 28);
+    }
+  }
+
   if (scene.anims.exists(`${key}-down`)) {
     return;
   }
