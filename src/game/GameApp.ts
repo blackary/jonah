@@ -95,15 +95,24 @@ export class GameApp {
   }
 
   registerBootScene(): void {
+    if (this.mode === 'world') {
+      return;
+    }
     this.ui.showTitle(this.session.hasSave(), this.session.getSettings());
   }
 
   registerPreloadComplete(): void {
+    if (this.mode === 'world') {
+      return;
+    }
     this.ui.showTitle(this.session.hasSave(), this.session.getSettings());
   }
 
   attachTitleScene(scene: TitleScene): void {
     void scene;
+    if (this.mode === 'world') {
+      return;
+    }
     this.mode = 'title';
     this.ui.hideHud();
     this.ui.showTitle(this.session.hasSave(), this.session.getSettings());
@@ -489,6 +498,23 @@ export class GameApp {
 
   private async runScript(scriptId: string, source: InteractionSource): Promise<void> {
     switch (scriptId) {
+      case 'onEnterJoppa': {
+        if (this.session.getFlag('joppaIntroSeen') === true) {
+          break;
+        }
+        await this.playLines([
+          {
+            speaker: 'Narrator',
+            text: 'Bronze markers show what Jonah can talk to or use. Face a marked person or object and press Space, Enter, or Z.',
+          },
+          {
+            speaker: 'Narrator',
+            text: 'Stone walls and large props block movement. The messenger is waiting just north of Jonah.',
+          },
+        ]);
+        this.session.setFlag('joppaIntroSeen', true);
+        break;
+      }
       case 'messenger': {
         if (!this.session.getFlag('heardCall')) {
           const outcome = await this.playDialogue('messenger_call');
@@ -517,8 +543,23 @@ export class GameApp {
         if (step <= 0) {
           await this.playDialogue('merchant_intro');
           this.session.setFlag('fareQuestStep', 1);
+          this.ui.showToast('The harbor office is marked in bronze.', 'info');
         } else if (step === 1 || step === 2) {
-          await this.playDialogue('merchant_waiting');
+          if (step === 1) {
+            await this.playLines([
+              {
+                speaker: 'Merchant',
+                text: 'The manifest is on the harbor office desk to the west. Bring it down-pier to the sailor, then return with his receipt.',
+              },
+            ]);
+          } else {
+            await this.playLines([
+              {
+                speaker: 'Merchant',
+                text: 'Good. The sailor is still waiting below the pier for that manifest. Bring his receipt back to me when he signs it.',
+              },
+            ]);
+          }
         } else {
           await this.playDialogue('merchant_return');
           this.session.setFlag('fareTokenObtained', true);
@@ -528,13 +569,21 @@ export class GameApp {
         }
         break;
       }
+      case 'harborOfficeDoor': {
+        await this.transitionToMap('JOPPA_HARBOR_OFFICE', 'from_docks');
+        break;
+      }
+      case 'leaveHarborOffice': {
+        await this.transitionToMap('JOPPA_DOCKS', 'office_return');
+        break;
+      }
       case 'manifestCrate': {
         const step = Number(this.session.getFlag('fareQuestStep') ?? 0);
         if (step < 1) {
-          await this.playLines([{ speaker: 'Narrator', text: 'A sealed crate and manifest ledger. Someone expects it down-pier.' }]);
+          await this.playLines([{ speaker: 'Narrator', text: 'Ledgers, seals, and harbor tallies. Jonah has no business here yet.' }]);
         } else if (step === 1) {
           await this.playLines([
-            { speaker: 'Narrator', text: 'Jonah shoulders the merchant’s manifest and crate tally for the sailor below.' },
+            { speaker: 'Narrator', text: 'Jonah takes the merchant’s Tarshish manifest from the harbor desk and tucks the receipt tablet beneath it.' },
           ]);
           this.session.setFlag('fareQuestStep', 2);
           this.ui.showToast('Deliver the manifest to the sailor.', 'info');
@@ -757,6 +806,19 @@ export class GameApp {
         }
         await this.playDialogue('official_audience');
         this.session.setFlag('officialAudienceGranted', true);
+        this.ui.showToast('The palace door is open.', 'success');
+        break;
+      }
+      case 'palaceDoor': {
+        if (this.session.getFlag('officialAudienceGranted') !== true) {
+          await this.playLines([{ speaker: 'Guard', text: 'The palace is not for stray voices. Win the official’s leave first.' }]);
+          break;
+        }
+        await this.transitionToMap('NINEVEH_PALACE', 'from_center');
+        break;
+      }
+      case 'leavePalace': {
+        await this.transitionToMap('NINEVEH_CENTER', 'palace_return');
         break;
       }
       case 'king': {

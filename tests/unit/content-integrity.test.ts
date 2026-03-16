@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { DIALOGUES } from '../../src/game/content/dialogue';
-import { COLLISION_TILES, MAPS } from '../../src/game/content/maps';
+import { COLLISION_TILES, createInitialSave, getObjectiveTargets, MAPS } from '../../src/game/content/maps';
 import { PUZZLES, TRIVIA_GATES } from '../../src/game/content/puzzles';
 import { TRIVIA_QUESTIONS } from '../../src/game/content/trivia';
 
@@ -127,6 +127,64 @@ describe('content integrity', () => {
         expect(puzzle, `missing puzzle ${object.puzzleId} for ${object.id}`).toBeDefined();
         expect(object.puzzleIndex, `${object.id} is missing a puzzle index`).toBeTypeOf('number');
         expect((object.puzzleIndex as number) < puzzle.targetState.length).toBe(true);
+      });
+    });
+  });
+
+  it('keeps objective targets aligned with authored actors and objects', () => {
+    const scenarios = [
+      createInitialSave(),
+      {
+        ...createInitialSave(),
+        flags: {
+          ...createInitialSave().flags,
+          heardCall: true,
+          fareQuestStep: 1,
+        },
+      },
+      {
+        ...createInitialSave(),
+        map: 'JOPPA_HARBOR_OFFICE',
+        flags: {
+          ...createInitialSave().flags,
+          heardCall: true,
+          fareQuestStep: 1,
+        },
+      },
+      {
+        ...createInitialSave(),
+        map: 'NINEVEH_CENTER',
+        flags: {
+          ...createInitialSave().flags,
+          heardHerald: true,
+          officialAudienceGranted: true,
+        },
+      },
+      {
+        ...createInitialSave(),
+        map: 'NINEVEH_PALACE',
+        flags: {
+          ...createInitialSave().flags,
+          heardHerald: true,
+          officialAudienceGranted: true,
+        },
+      },
+    ];
+
+    scenarios.forEach((save) => {
+      getObjectiveTargets(save).forEach((target) => {
+        if (target.kind === 'actor') {
+          expect(
+            MAPS[save.map].npcs.some((npc) => npc.id === target.id),
+            `missing actor objective target ${save.map}.${target.id}`,
+          ).toBe(true);
+          return;
+        }
+
+        expect(
+          MAPS[save.map].objects.some((object) => object.id === target.id),
+          `missing object objective target ${save.map}.${target.id}`,
+        ).toBe(true);
       });
     });
   });

@@ -223,6 +223,13 @@ export function generateArt(scene: Phaser.Scene): void {
     fill(ctx, '#fff7de', 4, 1, 2, 1);
   });
 
+  createTexture(scene, 'ui-marker', 12, 12, (ctx) => {
+    fill(ctx, '#7a4e20', 5, 0, 2, 2);
+    fill(ctx, '#d9ae62', 4, 2, 4, 4);
+    fill(ctx, '#f5df9a', 3, 5, 6, 4);
+    fill(ctx, '#7a4e20', 4, 9, 4, 2);
+  });
+
   createTexture(scene, 'mood-harbor', 640, 480, (ctx, width, height) => {
     paintLinearGradient(
       ctx,
@@ -508,6 +515,21 @@ export function generateArt(scene: Phaser.Scene): void {
       fill(ctx, '#5f381c', 13, 8, 6, 18);
       fill(ctx, '#a87b4a', 12, 8, 8, 3);
       fill(ctx, '#d3b078', 9, 15, 4, 3);
+    },
+    'object-door': (ctx) => {
+      fill(ctx, '#53321a', 7, 5, 18, 22);
+      fill(ctx, '#8d6035', 9, 7, 14, 18);
+      fill(ctx, '#5d3a1d', 13, 7, 2, 18);
+      fill(ctx, '#5d3a1d', 17, 7, 2, 18);
+      fill(ctx, '#d4b07a', 20, 16, 2, 2);
+    },
+    'object-ledger_table': (ctx) => {
+      fill(ctx, '#6d4525', 6, 14, 20, 8);
+      fill(ctx, '#4b2d17', 8, 22, 3, 5);
+      fill(ctx, '#4b2d17', 21, 22, 3, 5);
+      fill(ctx, '#d9cda8', 10, 9, 12, 6);
+      fill(ctx, '#8f6a43', 12, 11, 8, 2);
+      fill(ctx, '#b3373a', 18, 10, 2, 4);
     },
     'object-rope_coil': (ctx) => {
       fill(ctx, '#6a4421', 8, 15, 16, 7);

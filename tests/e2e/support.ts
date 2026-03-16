@@ -45,6 +45,28 @@ export async function startNewGame(page: Page): Promise<void> {
   await waitForApp(page);
   await page.evaluate(() => window.__JONAH__?.debugStartNewGame());
   await page.waitForFunction(() => window.__JONAH__?.getSnapshot().mode === 'world');
+  await page.getByTestId('hud').waitFor({ state: 'visible' });
+  await resolveOverlays(page);
+  await page
+    .waitForFunction(() => {
+      const text = document.querySelector('[data-testid="hud-context"]')?.textContent?.trim();
+      return Boolean(text);
+    }, { timeout: 3_000 })
+    .catch(() => undefined);
+}
+
+export async function continueSavedGame(page: Page): Promise<void> {
+  await waitForApp(page);
+  await page.getByTestId('title-continue').click({ force: true });
+  await page.waitForFunction(() => window.__JONAH__?.getSnapshot().mode === 'world');
+  await page.getByTestId('hud').waitFor({ state: 'visible' });
+  await resolveOverlays(page);
+  await page
+    .waitForFunction(() => {
+      const text = document.querySelector('[data-testid="hud-context"]')?.textContent?.trim();
+      return Boolean(text);
+    }, { timeout: 3_000 })
+    .catch(() => undefined);
 }
 
 export async function waitForMap(page: Page, mapId: string): Promise<void> {

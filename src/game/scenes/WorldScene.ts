@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { COLLISION_TILES, MAPS } from '../content/maps';
+import { COLLISION_TILES, getObjectiveTargets, MAPS } from '../content/maps';
 import { meetsRequirements } from '../runtime/requirements';
 import type { GameApp } from '../GameApp';
 import type {
@@ -8,6 +8,7 @@ import type {
   MapDecoration,
   MapDefinition,
   MapObject,
+  SaveState,
 } from '../types';
 
 const TILE_SIZE = 32;
@@ -23,11 +24,13 @@ const IDLE_FRAMES: Record<Direction, number> = {
 interface ActiveActor {
   data: MapActor;
   sprite: Phaser.GameObjects.Sprite;
+  indicator: Phaser.GameObjects.Image;
 }
 
 interface ActiveObject {
   data: MapObject;
   sprite: Phaser.GameObjects.Image;
+  indicator: Phaser.GameObjects.Image;
 }
 
 interface ActiveDecoration {
@@ -54,6 +57,8 @@ export class WorldScene extends Phaser.Scene {
 
   private effectLayer?: Phaser.GameObjects.Container;
 
+  private indicatorLayer?: Phaser.GameObjects.Container;
+
   private moodOverlay?: Phaser.GameObjects.Image;
 
   private player?: Phaser.GameObjects.Sprite;
@@ -61,6 +66,8 @@ export class WorldScene extends Phaser.Scene {
   private readonly actorSprites = new Map<string, ActiveActor>();
 
   private readonly objectSprites = new Map<string, ActiveObject>();
+
+  private readonly decorationSprites: ActiveDecoration[] = [];
 
   private readonly ambientSprites: Phaser.GameObjects.Image[] = [];
 
@@ -75,6 +82,8 @@ export class WorldScene extends Phaser.Scene {
   private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
 
   private keys?: Record<string, Phaser.Input.Keyboard.Key>;
+
+  private contextHint = '';
 
   constructor(private readonly app: GameApp) {
     super('world');
@@ -91,6 +100,7 @@ export class WorldScene extends Phaser.Scene {
     this.actorLayer = this.add.container();
     this.foregroundLayer = this.add.container();
     this.effectLayer = this.add.container();
+    this.indicatorLayer = this.add.container();
 
     this.cursors = this.input.keyboard?.createCursorKeys();
     this.keys = this.input.keyboard?.addKeys('W,A,S,D,Z,X,ENTER,SPACE,ESC') as Record<
@@ -112,6 +122,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     this.updateAmbient(time);
+    this.updateInteractionFeedback(time);
 
     if (!this.app.canAcceptWorldInput() || this.moving) {
       return;
@@ -169,8 +180,10 @@ export class WorldScene extends Phaser.Scene {
     this.actorLayer?.removeAll(true);
     this.foregroundLayer?.removeAll(true);
     this.effectLayer?.removeAll(true);
+    this.indicatorLayer?.removeAll(true);
     this.actorSprites.clear();
     this.objectSprites.clear();
+    this.decorationSprites.length = 0;
     this.ambientSprites.length = 0;
     this.animatedDecorations.length = 0;
     this.moodOverlay = undefined;
@@ -187,6 +200,7 @@ export class WorldScene extends Phaser.Scene {
 
     this.cameras.main.centerOn(FRAME_WIDTH / 2, FRAME_HEIGHT / 2);
     this.app.refreshHud();
+    this.contextHint = '';
     if (showBanner) {
       this.app.ui.showChapterBanner(map.chapter, map.name);
     }
@@ -218,6 +232,11 @@ export class WorldScene extends Phaser.Scene {
   refreshFromSave(): void {
     const save = this.app.session.requireSave();
 
+    this.decorationSprites.forEach(({ data, sprite }) => {
+      sprite.setVisible(meetsRequirements(data.visibleWhen, save));
+      sprite.setDepth(data.y * 10 + (data.depthOffset ?? 1));
+    });
+
     this.objectSprites.forEach(({ data, sprite }) => {
       sprite.setVisible(meetsRequirements(data.visibleWhen, save));
       const textureKey = this.resolveObjectTexture(data);
@@ -235,6 +254,8 @@ export class WorldScene extends Phaser.Scene {
       this.player.setDepth(save.player.y * 10 + 8);
       this.setIdleFrame(this.player, 'jonah', save.player.facing);
     }
+
+    this.updateInteractionFeedback(this.time.now);
   }
 
   shake(duration = 240, intensity = 0.008): void {
@@ -400,6 +421,12 @@ export class WorldScene extends Phaser.Scene {
       } else {
         this.decorationLayer?.add(image);
       }
+      this.decorationSprites.push({
+        data: decoration,
+        sprite: image,
+        baseX: image.x,
+        baseY: image.y,
+      });
       if (decoration.bobAmplitude) {
         this.animatedDecorations.push({
           data: decoration,
@@ -420,7 +447,8 @@ export class WorldScene extends Phaser.Scene {
       );
       image.setDepth(object.y * 10 + 2);
       this.objectLayer?.add(image);
-      this.objectSprites.set(object.id, { data: object, sprite: image });
+      const indicator = this.createIndicator(image.x, image.y - 24);
+      this.objectSprites.set(object.id, { data: object, sprite: image, indicator });
     });
   }
 
@@ -431,7 +459,8 @@ export class WorldScene extends Phaser.Scene {
       sprite.setDepth(actor.y * 10 + 6);
       this.setIdleFrame(sprite, actor.sprite, actor.facing);
       this.actorLayer?.add(sprite);
-      this.actorSprites.set(actor.id, { data: actor, sprite });
+      const indicator = this.createIndicator(sprite.x, sprite.y - 30);
+      this.actorSprites.set(actor.id, { data: actor, sprite, indicator });
     });
   }
 
@@ -512,6 +541,57 @@ export class WorldScene extends Phaser.Scene {
       (baseAlphaByTheme[theme] ?? 0.42) +
         Math.sin(time / (theme === 'storm' ? 760 : theme === 'fish' ? 1100 : 2400)) * (pulseByTheme[theme] ?? 0.01),
     );
+  }
+
+  private updateInteractionFeedback(time: number): void {
+    if (!this.currentMap || !this.player) {
+      return;
+    }
+
+    const save = this.app.session.requireSave();
+    const objectiveTargets = new Set(getObjectiveTargets(save).map((target) => `${target.kind}:${target.id}`));
+
+    let actorIndex = 0;
+    this.actorSprites.forEach(({ data, sprite, indicator }) => {
+      const offsetIndex = actorIndex;
+      actorIndex += 1;
+      const isVisible = sprite.visible;
+      indicator.setVisible(isVisible);
+      if (!isVisible) {
+        return;
+      }
+
+      const objective = objectiveTargets.has(`actor:${data.id}`);
+      indicator.setPosition(sprite.x, sprite.y - 30 - Math.sin(time / 220 + offsetIndex) * 1.8);
+      indicator.setDepth(sprite.depth + 20);
+      indicator.setTint(objective ? 0xffe3a3 : 0xc78a43);
+      indicator.setAlpha(objective ? 0.96 : 0.62);
+      indicator.setScale(objective ? 1 : 0.84);
+    });
+
+    let objectIndex = 0;
+    this.objectSprites.forEach(({ data, sprite, indicator }) => {
+      const offsetIndex = objectIndex;
+      objectIndex += 1;
+      const isVisible = sprite.visible;
+      indicator.setVisible(isVisible);
+      if (!isVisible) {
+        return;
+      }
+
+      const objective = objectiveTargets.has(`object:${data.id}`);
+      indicator.setPosition(sprite.x, sprite.y - 24 - Math.sin(time / 220 + offsetIndex + 2) * 1.6);
+      indicator.setDepth(sprite.depth + 20);
+      indicator.setTint(objective ? 0xffe3a3 : 0xc78a43);
+      indicator.setAlpha(objective ? 0.96 : 0.62);
+      indicator.setScale(objective ? 1 : 0.84);
+    });
+
+    const nextHint = this.getContextHint(save);
+    if (nextHint !== this.contextHint) {
+      this.contextHint = nextHint;
+      this.app.ui.updateContextHint(nextHint);
+    }
   }
 
   private resolveObjectTexture(object: MapObject): string {
@@ -608,6 +688,144 @@ export class WorldScene extends Phaser.Scene {
     }
   }
 
+  private getContextHint(save: SaveState): string {
+    const facingTarget = this.getFacingInteraction(save);
+    if (facingTarget) {
+      return this.describeInteraction(facingTarget.verb, facingTarget.label, false);
+    }
+
+    const guidance = getObjectiveTargets(save).find((target) => {
+      if (target.kind === 'actor') {
+        return this.actorSprites.get(target.id)?.sprite.visible;
+      }
+      return this.objectSprites.get(target.id)?.sprite.visible;
+    });
+
+    if (guidance) {
+      return `Next: ${this.describeObjectiveTarget(guidance.kind, guidance.id)}`;
+    }
+
+    return 'Bronze markers show usable people and objects. Face one and press Space / Enter / Z.';
+  }
+
+  private getFacingInteraction(save: SaveState): {
+    label: string;
+    verb: string;
+  } | null {
+    const [dx, dy] = this.directionToVector(save.player.facing);
+    const targetX = save.player.x + dx;
+    const targetY = save.player.y + dy;
+
+    const actor = [...this.actorSprites.values()].find(
+      ({ data, sprite }) => sprite.visible && data.x === targetX && data.y === targetY,
+    );
+    if (actor) {
+      return {
+        label: actor.data.name,
+        verb: actor.data.verb ?? 'Talk',
+      };
+    }
+
+    const object = [...this.objectSprites.values()].find(
+      ({ data, sprite }) => sprite.visible && data.x === targetX && data.y === targetY,
+    );
+    if (object) {
+      return {
+        label: object.data.name ?? this.getObjectLabel(object.data),
+        verb: object.data.verb ?? this.getObjectVerb(object.data.kind),
+      };
+    }
+
+    return null;
+  }
+
+  private describeObjectiveTarget(kind: 'actor' | 'object', id: string): string {
+    if (kind === 'actor') {
+      const actor = this.actorSprites.get(id);
+      if (!actor) {
+        return 'Continue onward.';
+      }
+      return this.describeInteraction(actor.data.verb ?? 'Talk', actor.data.name, true);
+    }
+
+    const object = this.objectSprites.get(id);
+    if (!object) {
+      return 'Continue onward.';
+    }
+    return this.describeInteraction(
+      object.data.verb ?? this.getObjectVerb(object.data.kind),
+      object.data.name ?? this.getObjectLabel(object.data),
+      true,
+    );
+  }
+
+  private describeInteraction(verb: string, label: string, imperative: boolean): string {
+    if (!imperative) {
+      return `${verb}: ${label}`;
+    }
+
+    if (verb === 'Talk') {
+      return `Talk to ${label}`;
+    }
+
+    if (verb === 'Read' || verb === 'Inspect' || verb === 'Toggle' || verb === 'Gather') {
+      return `${verb} ${label}`;
+    }
+
+    return `${verb} ${label}`;
+  }
+
+  private getObjectLabel(object: MapObject): string {
+    const fallbackByKind: Record<string, string> = {
+      sign: 'Sign',
+      spring: 'Spring',
+      milestone: 'Milestone',
+      banner: 'Banner',
+      altar: 'Altar',
+      throne: 'Throne',
+      helm: 'Helm',
+      door: 'Door',
+      cloth: 'Cloth Roll',
+      reeds: 'Reed Bundle',
+      stone_pile: 'Stone Pile',
+      shelter_frame: 'Shelter Frame',
+      plant: 'Leafy Plant',
+      dead_plant: 'Withered Plant',
+      ledger_table: 'Manifest Desk',
+      cleat_off: 'Cargo Cleat',
+      cleat_on: 'Cargo Cleat',
+      sigil_off: 'Sigil',
+      sigil_on: 'Sigil',
+    };
+
+    return fallbackByKind[object.kind] ?? object.kind.replace(/_/g, ' ');
+  }
+
+  private getObjectVerb(kind: string): string {
+    const verbByKind: Record<string, string> = {
+      sign: 'Read',
+      spring: 'Draw Water',
+      milestone: 'Read',
+      altar: 'Pray',
+      throne: 'Inspect',
+      banner: 'Inspect',
+      door: 'Enter',
+      cloth: 'Gather',
+      reeds: 'Gather',
+      stone_pile: 'Gather',
+      shelter_frame: 'Rest',
+      plant: 'Inspect',
+      dead_plant: 'Inspect',
+      ledger_table: 'Take',
+      cleat_off: 'Toggle',
+      cleat_on: 'Toggle',
+      sigil_off: 'Toggle',
+      sigil_on: 'Toggle',
+    };
+
+    return verbByKind[kind] ?? 'Inspect';
+  }
+
   private isBlocked(x: number, y: number): boolean {
     if (!this.currentMap || x < 0 || y < 0 || y >= this.currentMap.tiles.length || x >= this.currentMap.tiles[0].length) {
       return true;
@@ -627,10 +845,25 @@ export class WorldScene extends Phaser.Scene {
       return true;
     }
 
+    const decorationCollision = this.decorationSprites.some(({ data, sprite }) => {
+      if (!sprite.visible || !data.solid) return false;
+      return data.x === x && data.y === y && meetsRequirements(data.visibleWhen, save);
+    });
+    if (decorationCollision) {
+      return true;
+    }
+
     return [...this.actorSprites.values()].some(({ data, sprite }) => {
       if (!sprite.visible && !meetsRequirements(data.visibleWhen, save)) return false;
       return (data.solid ?? true) && data.x === x && data.y === y;
     });
+  }
+
+  private createIndicator(x: number, y: number): Phaser.GameObjects.Image {
+    const indicator = this.add.image(x, y, 'ui-marker');
+    indicator.setDepth(999);
+    this.indicatorLayer?.add(indicator);
+    return indicator;
   }
 
   private setIdleFrame(sprite: Phaser.GameObjects.Sprite, textureId: string, direction: Direction): void {

@@ -6,11 +6,13 @@ describe('content pack', () => {
   it('ships the full map list', () => {
     expect(Object.keys(MAPS)).toEqual([
       'JOPPA_DOCKS',
+      'JOPPA_HARBOR_OFFICE',
       'SHIP_DECK',
       'FISH_INTERIOR',
       'COAST_ROAD',
       'NINEVEH_GATE',
       'NINEVEH_CENTER',
+      'NINEVEH_PALACE',
       'EAST_OF_CITY',
     ]);
   });

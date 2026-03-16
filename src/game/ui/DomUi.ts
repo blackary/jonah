@@ -48,6 +48,8 @@ export class DomUi {
 
   private readonly hudInventory: HTMLElement;
 
+  private readonly hudContext: HTMLElement;
+
   private readonly chapterBanner: HTMLElement;
 
   private readonly dialoguePanel: HTMLElement;
@@ -125,7 +127,10 @@ export class DomUi {
             </div>
             <button class="ui-button small" data-action="pause" data-testid="hud-pause">Pause</button>
           </div>
-          <p class="desktop-inline-hint">Desktop: WASD / arrows move, Space / Enter / Z act, Esc pauses.</p>
+          <div class="hud-meta">
+            <p class="hud-context" data-testid="hud-context"></p>
+            <p class="desktop-inline-hint">Desktop: WASD / arrows move, Space / Enter / Z act, Esc pauses.</p>
+          </div>
         </section>
 
         <section class="chapter-banner hidden" data-testid="chapter-banner"></section>
@@ -179,6 +184,7 @@ export class DomUi {
     this.hudLocation = this.require('[data-testid="hud-location"]');
     this.hudObjective = this.require('[data-testid="hud-objective"]');
     this.hudInventory = this.require('[data-testid="hud-inventory"]');
+    this.hudContext = this.require('[data-testid="hud-context"]');
     this.chapterBanner = this.require('.chapter-banner');
     this.dialoguePanel = this.require('.dialogue-panel');
     this.dialogueSpeaker = this.require('[data-testid="dialogue-speaker"]');
@@ -206,6 +212,7 @@ export class DomUi {
   showTitle(canContinue: boolean, settings: SettingsState): void {
     this.titleScreen.classList.remove('hidden');
     this.hud.classList.add('hidden');
+    this.hudContext.textContent = '';
     this.continueButton.disabled = !canContinue;
     this.titleMeta.textContent = `Difficulty: ${this.pretty(settings.difficulty)} · Text: ${this.pretty(
       settings.textSpeed,
@@ -229,6 +236,11 @@ export class DomUi {
 
   hideHud(): void {
     this.hud.classList.add('hidden');
+    this.hudContext.textContent = '';
+  }
+
+  updateContextHint(text: string): void {
+    this.hudContext.textContent = text;
   }
 
   showChapterBanner(chapter: string, location: string): void {

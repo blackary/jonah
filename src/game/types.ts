@@ -48,6 +48,7 @@ export interface MapDecoration {
   x: number;
   y: number;
   kind: string;
+  solid?: boolean;
   layer?: 'background' | 'foreground';
   alpha?: number;
   scale?: number;
@@ -65,6 +66,7 @@ export interface MapActor {
   y: number;
   facing: Direction;
   event: string;
+  verb?: string;
   visibleWhen?: RequirementSet;
   solid?: boolean;
 }
@@ -75,6 +77,8 @@ export interface MapObject {
   y: number;
   kind: string;
   event: string;
+  name?: string;
+  verb?: string;
   solid?: boolean;
   visibleWhen?: RequirementSet;
   puzzleId?: string;
@@ -172,6 +176,11 @@ export interface HudState {
   location: string;
   objective: string;
   inventory: string[];
+}
+
+export interface ObjectiveTarget {
+  kind: 'actor' | 'object';
+  id: string;
 }
 
 export interface DialogueOutcome {

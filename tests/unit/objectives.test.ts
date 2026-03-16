@@ -7,7 +7,7 @@ describe('objective resolver', () => {
       {
         label: 'initial joppa intro',
         configure: () => createInitialSave(),
-        expected: 'Hear the word of the LORD at the docks.',
+        expected: 'Talk to the Messenger just north of Jonah.',
       },
       {
         label: 'joppa manifest step',
@@ -17,7 +17,18 @@ describe('objective resolver', () => {
           save.flags.fareQuestStep = 1;
           return save;
         },
-        expected: 'Carry the merchant’s manifest to the sailor.',
+        expected: 'Enter the harbor office and collect the manifest.',
+      },
+      {
+        label: 'harbor office retrieval',
+        configure: () => {
+          const save = createInitialSave();
+          save.map = 'JOPPA_HARBOR_OFFICE';
+          save.flags.heardCall = true;
+          save.flags.fareQuestStep = 1;
+          return save;
+        },
+        expected: 'Take the Tarshish manifest from the desk.',
       },
       {
         label: 'ship deck confession',
@@ -44,9 +55,22 @@ describe('objective resolver', () => {
         configure: () => {
           const save = createInitialSave();
           save.map = 'NINEVEH_CENTER';
+          save.flags.heardHerald = true;
+          save.flags.officialAudienceGranted = true;
           return save;
         },
-        expected: 'Carry the warning from street to throne.',
+        expected: 'Enter the palace and stand before the king.',
+      },
+      {
+        label: 'nineveh palace audience',
+        configure: () => {
+          const save = createInitialSave();
+          save.map = 'NINEVEH_PALACE';
+          save.flags.heardHerald = true;
+          save.flags.officialAudienceGranted = true;
+          return save;
+        },
+        expected: 'Stand before the king and deliver the warning.',
       },
       {
         label: 'east city final question',
@@ -74,7 +98,7 @@ describe('objective resolver', () => {
     expect(getHudState(save)).toEqual({
       chapter: 'Jonah 1',
       location: 'Joppa Docks',
-      objective: 'Hear the word of the LORD at the docks.',
+      objective: 'Talk to the Messenger just north of Jonah.',
       inventory: ['Ship Fare', 'Water Flask'],
     });
   });

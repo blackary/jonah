@@ -11,15 +11,19 @@ import {
 
 test('plays from title through the fish release and onto the coast road', async ({ page }) => {
   await page.goto('/');
-  await page.getByTestId('title-new').click();
-  await page.getByTestId('hud').waitFor();
+  await startNewGame(page);
+  await expect(page.getByTestId('hud-context')).toContainText('Talk: Messenger');
 
   await runScript(page, 'messenger', { kind: 'actor', actorId: 'messenger' }, ['Flee toward Tarshish']);
   let snapshot = await getSnapshot(page);
   expect(snapshot.save?.flags.heardCall).toBe(true);
 
   await runScript(page, 'merchant', { kind: 'actor', actorId: 'merchant' });
+  await runScript(page, 'harborOfficeDoor', { kind: 'object', objectId: 'harbor_office_door' });
+  await waitForMap(page, 'JOPPA_HARBOR_OFFICE');
   await runScript(page, 'manifestCrate', { kind: 'object', objectId: 'manifest_crate' });
+  await runScript(page, 'leaveHarborOffice', { kind: 'object', objectId: 'office_exit' });
+  await waitForMap(page, 'JOPPA_DOCKS');
   await runScript(page, 'sailor', { kind: 'actor', actorId: 'sailor' });
   await runScript(page, 'merchant', { kind: 'actor', actorId: 'merchant' });
   snapshot = await getSnapshot(page);

@@ -254,9 +254,22 @@ select {
 
 .desktop-inline-hint {
   margin: 0;
-  padding: 0 4px;
   font-size: 0.84rem;
   color: rgba(242, 223, 178, 0.92);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.28);
+}
+
+.hud-meta {
+  display: grid;
+  gap: 2px;
+  padding: 0 4px;
+}
+
+.hud-context {
+  margin: 0;
+  min-height: 1.2em;
+  font-size: 0.88rem;
+  color: #f2dfb2;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.28);
 }
 

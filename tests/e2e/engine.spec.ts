@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import {
   advanceToTrivia,
+  continueSavedGame,
   getCorrectAnswer,
   getQuestionForPrompt,
   getSnapshot,
@@ -14,7 +15,6 @@ test('supports desktop keyboard play, pause settings, save, and continue', async
   await page.goto('/');
   await page.getByTestId('title-screen').waitFor();
   await startNewGame(page);
-  await page.getByTestId('hud').waitFor();
 
   await page.evaluate(() => {
     const app = window.__JONAH__;
@@ -47,8 +47,7 @@ test('supports desktop keyboard play, pause settings, save, and continue', async
   await expect(page.getByTestId('title-meta')).toContainText('Difficulty: Normal');
   await expect(page.getByTestId('title-continue')).toBeEnabled();
 
-  await page.getByTestId('title-continue').click();
-  await page.waitForFunction(() => window.__JONAH__?.getSnapshot().mode === 'world');
+  await continueSavedGame(page);
 
   snapshot = await getSnapshot(page);
   expect(snapshot.settings.difficulty).toBe('normal');
@@ -59,8 +58,7 @@ test('supports desktop keyboard play, pause settings, save, and continue', async
 
 test('retries trivia with a hint after repeated wrong answers', async ({ page }) => {
   await page.goto('/');
-  await page.getByTestId('title-new').click();
-  await page.getByTestId('hud').waitFor();
+  await startNewGame(page);
 
   await page.evaluate(() => {
     window.__JONAH__?.session.addItem('fare_token');
@@ -97,6 +95,32 @@ test('retries trivia with a hint after repeated wrong answers', async ({ page })
   const triviaState = await page.evaluate(() => window.__JONAH__?.session.requireSave().trivia);
   expect(triviaState?.answered[question.id]).toBe(true);
   expect(triviaState?.attemptsLeft[question.id]).toBeUndefined();
+});
+
+test('uses contextual guidance and supports interior room transitions', async ({ page }) => {
+  await page.goto('/');
+  await startNewGame(page);
+
+  await expect(page.getByTestId('hud-context')).toContainText('Talk: Messenger');
+
+  await runScript(page, 'messenger', { kind: 'actor', actorId: 'messenger' }, ['Flee toward Tarshish']);
+  await runScript(page, 'merchant', { kind: 'actor', actorId: 'merchant' });
+
+  await runScript(page, 'harborOfficeDoor', { kind: 'object', objectId: 'harbor_office_door' });
+  await page.waitForFunction(() => window.__JONAH__?.getSnapshot().save?.map === 'JOPPA_HARBOR_OFFICE');
+  await expect(page.getByTestId('hud-context')).toContainText('Next: Take Tarshish Manifest');
+
+  await page.evaluate(async () => {
+    const app = window.__JONAH__;
+    app?.debugSetFlag('ninevehIntroSeen', true);
+    await app?.debugTransition('NINEVEH_CENTER', 'west_entry');
+    app?.debugSetFlag('heardHerald', true);
+    app?.debugSetFlag('officialAudienceGranted', true);
+  });
+
+  await runScript(page, 'palaceDoor', { kind: 'object', objectId: 'palace_door' });
+  await page.waitForFunction(() => window.__JONAH__?.getSnapshot().save?.map === 'NINEVEH_PALACE');
+  await expect(page.getByTestId('hud-context')).toContainText('Next: Talk to King of Nineveh');
 });
 
 test('plays through the east-of-city finale and returns to title', async ({ page }) => {
