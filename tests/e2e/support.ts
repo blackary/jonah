@@ -46,13 +46,7 @@ export async function startNewGame(page: Page): Promise<void> {
   await page.evaluate(() => window.__JONAH__?.debugStartNewGame());
   await page.waitForFunction(() => window.__JONAH__?.getSnapshot().mode === 'world');
   await page.getByTestId('hud').waitFor({ state: 'visible' });
-  await resolveOverlays(page);
-  await page
-    .waitForFunction(() => {
-      const text = document.querySelector('[data-testid="hud-context"]')?.textContent?.trim();
-      return Boolean(text);
-    }, { timeout: 3_000 })
-    .catch(() => undefined);
+  await settleWorldUi(page);
 }
 
 export async function continueSavedGame(page: Page): Promise<void> {
@@ -60,13 +54,7 @@ export async function continueSavedGame(page: Page): Promise<void> {
   await page.getByTestId('title-continue').click({ force: true });
   await page.waitForFunction(() => window.__JONAH__?.getSnapshot().mode === 'world');
   await page.getByTestId('hud').waitFor({ state: 'visible' });
-  await resolveOverlays(page);
-  await page
-    .waitForFunction(() => {
-      const text = document.querySelector('[data-testid="hud-context"]')?.textContent?.trim();
-      return Boolean(text);
-    }, { timeout: 3_000 })
-    .catch(() => undefined);
+  await settleWorldUi(page);
 }
 
 export async function waitForMap(page: Page, mapId: string): Promise<void> {
@@ -144,6 +132,20 @@ export async function resolveOverlays(page: Page, pendingChoices: string[] = [])
 
     break;
   }
+}
+
+async function settleWorldUi(page: Page): Promise<void> {
+  await resolveOverlays(page);
+  await page.waitForTimeout(120);
+  await resolveOverlays(page);
+  await page
+    .waitForFunction(() => {
+      const app = window.__JONAH__;
+      const snapshot = app?.getSnapshot() as Snapshot | undefined;
+      const text = document.querySelector('[data-testid="hud-context"]')?.textContent?.trim();
+      return Boolean(snapshot && snapshot.overlayDepth === 0 && text);
+    }, { timeout: 3_000 })
+    .catch(() => undefined);
 }
 
 export async function runScript(

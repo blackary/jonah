@@ -48,6 +48,9 @@ export interface MapDecoration {
   x: number;
   y: number;
   kind: string;
+  name?: string;
+  verb?: string;
+  inspectText?: string;
   solid?: boolean;
   layer?: 'background' | 'foreground';
   alpha?: number;

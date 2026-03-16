@@ -285,6 +285,15 @@ export class WorldScene extends Phaser.Scene {
     );
     if (object) {
       await this.app.handleEvent(object.data.event, { kind: 'object', objectId: object.data.id });
+      return;
+    }
+
+    const decoration = this.getFacingDecoration(save);
+    if (decoration) {
+      await this.app.examineFeature(
+        decoration.data.name ?? this.getDecorationLabel(decoration.data),
+        decoration.data.inspectText ?? this.getDecorationInspectionText(decoration.data),
+      );
     }
   }
 
@@ -705,7 +714,7 @@ export class WorldScene extends Phaser.Scene {
       return `Next: ${this.describeObjectiveTarget(guidance.kind, guidance.id)}`;
     }
 
-    return 'Bronze markers show usable people and objects. Face one and press Space / Enter / Z.';
+    return 'Bronze markers show major interactions. Face props as well to examine them with Space / Enter / Z.';
   }
 
   private getFacingInteraction(save: SaveState): {
@@ -736,7 +745,29 @@ export class WorldScene extends Phaser.Scene {
       };
     }
 
+    const decoration = this.getFacingDecoration(save);
+    if (decoration) {
+      return {
+        label: decoration.data.name ?? this.getDecorationLabel(decoration.data),
+        verb: decoration.data.verb ?? this.getDecorationVerb(decoration.data.kind),
+      };
+    }
+
     return null;
+  }
+
+  private getFacingDecoration(save: SaveState): ActiveDecoration | undefined {
+    const [dx, dy] = this.directionToVector(save.player.facing);
+    const targetX = save.player.x + dx;
+    const targetY = save.player.y + dy;
+
+    return this.decorationSprites.find(
+      ({ data, sprite }) =>
+        sprite.visible &&
+        data.x === targetX &&
+        data.y === targetY &&
+        meetsRequirements(data.visibleWhen, save),
+    );
   }
 
   private describeObjectiveTarget(kind: 'actor' | 'object', id: string): string {
@@ -824,6 +855,80 @@ export class WorldScene extends Phaser.Scene {
     };
 
     return verbByKind[kind] ?? 'Inspect';
+  }
+
+  private getDecorationLabel(decoration: MapDecoration): string {
+    const fallbackByKind: Record<string, string> = {
+      barrel: 'Barrel',
+      crate_stack: 'Crate Stack',
+      lantern: 'Lantern',
+      dock_post: 'Dock Post',
+      net: 'Fishing Net',
+      moored_ship: 'Tarshish Ship',
+      cargo: 'Cargo Lashings',
+      hatch: 'Deck Hatch',
+      fish_rib: 'Fish Rib',
+      tendril: 'Tendril',
+      coral: 'Coral Growth',
+      cairn: 'Cairn',
+      shrub: 'Desert Shrub',
+      prayer_stone: 'Prayer Stone',
+      watcher_pair: 'Watchers',
+      citizen_group: 'Citizens',
+      column: 'Stone Column',
+      brazier: 'Brazier',
+      market: 'Market Stall',
+      awning: 'Awning',
+      banner: 'Banner',
+      city_far: 'Nineveh',
+      sun_mark: 'Sun',
+    };
+
+    return decoration.name ?? fallbackByKind[decoration.kind] ?? decoration.kind.replace(/_/g, ' ');
+  }
+
+  private getDecorationVerb(kind: string): string {
+    const verbByKind: Record<string, string> = {
+      banner: 'Inspect',
+      city_far: 'Observe',
+      sun_mark: 'Observe',
+    };
+
+    return verbByKind[kind] ?? 'Examine';
+  }
+
+  private getDecorationInspectionText(decoration: MapDecoration): string {
+    const textByKind: Record<string, string> = {
+      barrel: 'Salt and tar cling to the staves. The barrel has stood on this quay through more than one voyage.',
+      crate_stack: 'The crates are bound tight with rope, waiting for hands strong enough to shift them.',
+      lantern: 'The lamp throws a patient light, small against sea-dark and gathering dusk.',
+      dock_post: 'The post is scarred by rope, tide, and years of departures.',
+      net: 'The net smells of brine and labor. Tarshish is not the only thing these docks have hauled in.',
+      moored_ship: 'The ship rides low beside the quay, broad-bellied and ready for a long flight west.',
+      cargo: 'The cargo has been lashed against the deck, but the storm will test every knot.',
+      hatch: 'A dark hatch yawns below deck, promising cramped air and worse seasickness.',
+      fish_rib: 'The rib arches overhead like a prison beam, a reminder that Jonah has been spared, not freed.',
+      tendril: 'The tendril sways with the creature’s breathing, as if the whole chamber itself were alive and listening.',
+      coral: 'Strange growth clings to the chamber walls, soft and pale in the dimness.',
+      cairn: 'Patient hands stacked these stones to mark a way through open country.',
+      shrub: 'A stubborn shrub claws at the dry ground, living on less mercy than Jonah expects for himself.',
+      prayer_stone: 'The stone is worn smooth where knees and hands have lingered in prayer.',
+      watcher_pair: 'They keep their distance and watch in silence, measuring Jonah before they trust his word.',
+      citizen_group: 'The crowd shifts in uneasy knots, listening for whether judgment or mercy will prevail.',
+      column: 'The carved stone column bears its weight without complaint, more steadfast than the prophet beneath it.',
+      brazier: 'Heat rolls from the brazier in measured breaths, carrying ash and the smell of oil.',
+      market: 'Bolts of cloth, baskets, and rumor gather under the stall’s shade.',
+      awning: 'Dyed fabric stretches overhead, casting a narrow mercy of shade on the stones below.',
+      banner: 'The banner hangs high in civic pride, proclaiming a greatness that will not stand against the word of the LORD.',
+      city_far: 'Nineveh rests on the horizon in hard lines and heat haze, still waiting to hear what Jonah must say.',
+      sun_mark: 'The sun presses hard against the hillside, bright enough to turn comfort into complaint.',
+    };
+
+    return (
+      decoration.inspectText ??
+      textByKind[decoration.kind] ??
+      'Jonah studies it for a moment, taking in the shape of the place around him.'
+    );
   }
 
   private isBlocked(x: number, y: number): boolean {

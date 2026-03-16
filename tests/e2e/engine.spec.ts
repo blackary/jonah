@@ -71,10 +71,25 @@ test('space advances focused dialogue actions', async ({ page }) => {
   );
   await page.keyboard.press('Space');
   await expect(page.getByTestId('dialogue-text')).toHaveText('What will Jonah do?');
-  await page.keyboard.press('Space');
+  await page.getByRole('button', { name: 'Go to Nineveh' }).click();
   await expect(page.getByTestId('dialogue-text')).toContainText(
     'That would have been wisdom. Yet Jonah in this story turns toward the western sea.',
   );
+});
+
+test('facing scenery props shows an examine hint and allows inspection', async ({ page }) => {
+  await page.goto('/');
+  await startNewGame(page);
+
+  await page.evaluate(() => {
+    const app = window.__JONAH__;
+    app?.session.setPlayerPosition(5, 6, 'up');
+  });
+
+  await expect(page.getByTestId('hud-context')).toHaveText('Examine: Barrel');
+  await page.keyboard.press('Space');
+  await expect(page.getByTestId('dialogue-speaker')).toHaveText('Barrel');
+  await expect(page.getByTestId('dialogue-text')).toContainText('Salt and tar cling to the staves.');
 });
 
 test('retries trivia with a hint after repeated wrong answers', async ({ page }) => {

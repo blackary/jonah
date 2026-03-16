@@ -445,21 +445,42 @@ export class DomUi {
 
   private bindOverlayShortcuts(): void {
     document.addEventListener('keydown', (event) => {
-      if (!['Space', 'Enter', 'KeyZ'].includes(event.code) || event.repeat) {
+      if (event.repeat) {
         return;
       }
 
-      if (document.activeElement instanceof HTMLButtonElement) {
+      const activeElement = document.activeElement;
+      if (
+        activeElement instanceof HTMLButtonElement ||
+        activeElement instanceof HTMLInputElement ||
+        activeElement instanceof HTMLTextAreaElement
+      ) {
         return;
       }
 
-      const button = this.getActiveSingleActionButton();
-      if (!button) {
+      if (['Space', 'Enter', 'KeyZ'].includes(event.code)) {
+        const button = this.getActiveSingleActionButton();
+        if (button) {
+          event.preventDefault();
+          button.click();
+          return;
+        }
+
+        if (!this.hasVisibleOverlay() && !(activeElement instanceof HTMLCanvasElement)) {
+          event.preventDefault();
+          this.handlers.onInteract();
+        }
         return;
       }
 
-      event.preventDefault();
-      button.click();
+      if (
+        ['Escape', 'KeyX'].includes(event.code) &&
+        !this.hasVisibleOverlay() &&
+        !(activeElement instanceof HTMLCanvasElement)
+      ) {
+        event.preventDefault();
+        this.handlers.onPauseToggle();
+      }
     });
   }
 
@@ -477,6 +498,14 @@ export class DomUi {
     }
 
     return null;
+  }
+
+  private hasVisibleOverlay(): boolean {
+    return (
+      !this.dialoguePanel.classList.contains('hidden') ||
+      !this.modal.classList.contains('hidden') ||
+      !this.triviaPanel.classList.contains('hidden')
+    );
   }
 
   private focusFirstAction(container: HTMLElement): void {

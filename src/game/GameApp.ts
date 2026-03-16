@@ -148,6 +148,16 @@ export class GameApp {
     this.ui.updateHud(getHudState(this.session.requireSave()));
   }
 
+  async examineFeature(label: string, text: string): Promise<void> {
+    if (this.overlayDepth > 0) {
+      return;
+    }
+
+    await this.runOverlay(async () => {
+      await this.playLines([{ speaker: label, text }]);
+    });
+  }
+
   async startNewGame(): Promise<void> {
     this.session.startNewGame();
     this.mode = 'world';
@@ -505,7 +515,7 @@ export class GameApp {
         await this.playLines([
           {
             speaker: 'Narrator',
-            text: 'Bronze markers show what Jonah can talk to or use. Face a marked person or object and press Space, Enter, or Z.',
+            text: 'Bronze markers show what Jonah can talk to or use. Face a marked person or object and press Space, Enter, or Z. Close scene props can also be examined.',
           },
           {
             speaker: 'Narrator',
