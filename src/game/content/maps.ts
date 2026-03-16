@@ -12,12 +12,12 @@ export const MAPS: Record<string, MapDefinition> = {
       '~~~~~~~~~~~~~~~~~~~~',
       '~~~~~~........~~~~~~',
       '~~~~...........~~~~~',
-      '~~~..==========..~~~',
-      '~~...=........=...~~',
-      '#####=........=.....',
-      '#+++#=........=.....',
-      '#+++#=........=.....',
-      '##=##====..====.....',
+      '~~~..==========~~~~~',
+      '~~...=........=~~~~~',
+      '#####=........=~~~~~',
+      '#+++#=........=..~~~',
+      '#+++#=........=..~~~',
+      '##=##====..====..~~~',
       '.....=........=.....',
       '.....=........=.....',
       '.....=........=.....',
@@ -41,8 +41,8 @@ export const MAPS: Record<string, MapDefinition> = {
       { id: 'messenger', name: 'Messenger', sprite: 'messenger', x: 3, y: 12, facing: 'down', event: 'script:messenger' },
       { id: 'merchant', name: 'Merchant', sprite: 'merchant', x: 15, y: 6, facing: 'left', event: 'script:merchant' },
       { id: 'sailor', name: 'Sailor', sprite: 'sailor', x: 16, y: 10, facing: 'left', event: 'script:sailor' },
-      { id: 'dockmaster', name: 'Dockmaster', sprite: 'dockmaster', x: 9, y: 4, facing: 'down', event: 'script:dockmaster' },
-      { id: 'captain', name: 'Captain', sprite: 'captain', x: 12, y: 4, facing: 'down', event: 'script:captain' },
+      { id: 'dockmaster', name: 'Dockmaster', sprite: 'dockmaster', x: 9, y: 5, facing: 'down', event: 'script:dockmaster' },
+      { id: 'captain', name: 'Captain', sprite: 'captain', x: 13, y: 5, facing: 'left', event: 'script:captain' },
     ],
     objects: [
       {
@@ -55,15 +55,26 @@ export const MAPS: Record<string, MapDefinition> = {
         event: 'script:harborOfficeDoor',
         solid: true,
       },
+      {
+        id: 'boarding_plank',
+        x: 15,
+        y: 5,
+        kind: 'gangplank',
+        name: 'Gangplank',
+        verb: 'Board',
+        event: 'script:gangplank',
+        solid: true,
+        visibleWhen: { allFlags: ['joppaTriviaPassed'] },
+      },
       { id: 'dock_sign', x: 6, y: 9, kind: 'sign', name: 'Dock Sign', verb: 'Read', event: 'dialogue:joppa_sign', solid: true },
     ],
     decorations: [
       { id: 'barrel_a', x: 5, y: 5, kind: 'barrel', solid: true },
       { id: 'barrel_b', x: 6, y: 5, kind: 'barrel', solid: true },
       { id: 'crate_stack', x: 11, y: 10, kind: 'crate_stack', solid: true },
-      { id: 'boat_shadow', x: 17, y: 3, kind: 'ship_shadow', scale: 1.25, alpha: 0.55, depthOffset: -8 },
+      { id: 'moored_ship', x: 17, y: 5, kind: 'moored_ship', scale: 1.7, alpha: 0.96, depthOffset: -10 },
       { id: 'watchers', x: 3, y: 7, kind: 'watcher_pair', alpha: 0.88 },
-      { id: 'lantern_quay', x: 10, y: 5, kind: 'lantern', bobAmplitude: 0.5, bobSpeed: 1600, solid: true },
+      { id: 'lantern_quay', x: 7, y: 5, kind: 'lantern', bobAmplitude: 0.5, bobSpeed: 1600, solid: true },
       { id: 'rope_coil', x: 7, y: 10, kind: 'rope_coil' },
       { id: 'net_stack', x: 14, y: 9, kind: 'net_stack' },
       { id: 'sail_roll', x: 16, y: 8, kind: 'sail_roll', alpha: 0.9 },
@@ -708,7 +719,7 @@ export function getCurrentObjective(save: SaveState): string {
         return 'Bring the sailor’s receipt back to the merchant.';
       }
       if (!flags.joppaTriviaPassed) return 'Answer the dockmaster’s question about Jonah’s calling.';
-      return 'Board the ship bound for Tarshish.';
+      return 'Board at the lowered gangplank for Tarshish.';
     case 'JOPPA_HARBOR_OFFICE':
       if (Number(flags.fareQuestStep) < 1) return 'Leave the office and speak to the merchant on the docks.';
       if (Number(flags.fareQuestStep) === 1) return 'Take the Tarshish manifest from the desk.';
@@ -763,7 +774,7 @@ export function getObjectiveTargets(save: SaveState): ObjectiveTarget[] {
         return [{ kind: 'actor', id: 'merchant' }];
       }
       if (!flags.joppaTriviaPassed) return [{ kind: 'actor', id: 'dockmaster' }];
-      return [{ kind: 'actor', id: 'captain' }];
+      return [{ kind: 'object', id: 'boarding_plank' }];
     case 'JOPPA_HARBOR_OFFICE':
       if (Number(flags.fareQuestStep) < 1) return [{ kind: 'object', id: 'office_exit' }];
       if (Number(flags.fareQuestStep) === 1) return [{ kind: 'object', id: 'manifest_crate' }];

@@ -33,7 +33,7 @@ test('plays from title through the fish release and onto the coast road', async 
   snapshot = await getSnapshot(page);
   expect(snapshot.save?.flags.joppaTriviaPassed).toBe(true);
 
-  await runScript(page, 'captain', { kind: 'actor', actorId: 'captain' });
+  await runScript(page, 'gangplank', { kind: 'object', objectId: 'boarding_plank' });
   await waitForMap(page, 'SHIP_DECK');
   await resolveOverlays(page);
 

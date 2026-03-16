@@ -511,6 +511,16 @@ export function generateArt(scene: Phaser.Scene): void {
       fill(ctx, 'rgba(11,25,36,0.45)', 4, 15, 24, 8);
       fill(ctx, 'rgba(11,25,36,0.6)', 8, 10, 14, 5);
     },
+    'object-moored_ship': (ctx) => {
+      fill(ctx, '#2a4f64', 0, 23, 32, 5);
+      fill(ctx, '#3f281a', 4, 16, 24, 8);
+      fill(ctx, '#7b4a28', 7, 12, 18, 5);
+      fill(ctx, '#d9c59a', 11, 5, 10, 8);
+      fill(ctx, '#a88a5e', 11, 13, 10, 2);
+      fill(ctx, '#6f4625', 15, 2, 2, 14);
+      fill(ctx, '#e8ddbb', 16, 4, 6, 1);
+      fill(ctx, '#d2b67c', 5, 19, 22, 2);
+    },
     'object-dock_post': (ctx) => {
       fill(ctx, '#5f381c', 13, 8, 6, 18);
       fill(ctx, '#a87b4a', 12, 8, 8, 3);
@@ -530,6 +540,15 @@ export function generateArt(scene: Phaser.Scene): void {
       fill(ctx, '#d9cda8', 10, 9, 12, 6);
       fill(ctx, '#8f6a43', 12, 11, 8, 2);
       fill(ctx, '#b3373a', 18, 10, 2, 4);
+    },
+    'object-gangplank': (ctx) => {
+      fill(ctx, '#6f4323', 4, 13, 24, 6);
+      fill(ctx, '#a67849', 6, 11, 20, 10);
+      fill(ctx, '#5b351b', 8, 12, 2, 8);
+      fill(ctx, '#5b351b', 14, 12, 2, 8);
+      fill(ctx, '#5b351b', 20, 12, 2, 8);
+      fill(ctx, '#d8b27b', 3, 10, 3, 12);
+      fill(ctx, '#d8b27b', 26, 10, 3, 12);
     },
     'object-rope_coil': (ctx) => {
       fill(ctx, '#6a4421', 8, 15, 16, 7);

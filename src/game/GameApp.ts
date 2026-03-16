@@ -613,10 +613,27 @@ export class GameApp {
           if (await this.playTriviaGate('joppa_call')) {
             this.session.setFlag('joppaTriviaPassed', true);
             await this.playDialogue('dockmaster_pass');
+            this.ui.showToast('Gangplank lowered.', 'success');
           }
           break;
         }
         await this.playLines([{ speaker: 'Dockmaster', text: 'The plank is clear. If you mean to flee, then flee.' }]);
+        break;
+      }
+      case 'gangplank': {
+        if (this.session.getFlag('joppaTriviaPassed') !== true) {
+          await this.playLines([
+            {
+              speaker: 'Dockmaster',
+              text: 'The gangplank stays up until your fare and your answer are in order.',
+            },
+          ]);
+          break;
+        }
+        await this.playDialogue('captain_board');
+        this.session.setFlag('boardedShip', true);
+        this.session.removeItem('fare_token');
+        await this.transitionToMap('SHIP_DECK', 'gangplank');
         break;
       }
       case 'captain': {
