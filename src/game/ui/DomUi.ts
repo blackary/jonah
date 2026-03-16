@@ -203,6 +203,7 @@ export class DomUi {
 
     this.bindStaticActions();
     this.bindMobileControls();
+    this.bindOverlayShortcuts();
     this.bindKeyboardGrid(this.titleActions);
     this.bindKeyboardGrid(this.dialogueActions);
     this.bindKeyboardGrid(this.triviaChoices);
@@ -431,12 +432,51 @@ export class DomUi {
           event.preventDefault();
           focusAt(buttons.length - 1);
           break;
+        case 'Enter':
+        case 'Space':
         case 'KeyZ':
           event.preventDefault();
+          event.stopPropagation();
           buttons[currentIndex].click();
           break;
       }
     });
+  }
+
+  private bindOverlayShortcuts(): void {
+    document.addEventListener('keydown', (event) => {
+      if (!['Space', 'Enter', 'KeyZ'].includes(event.code) || event.repeat) {
+        return;
+      }
+
+      if (document.activeElement instanceof HTMLButtonElement) {
+        return;
+      }
+
+      const button = this.getActiveSingleActionButton();
+      if (!button) {
+        return;
+      }
+
+      event.preventDefault();
+      button.click();
+    });
+  }
+
+  private getActiveSingleActionButton(): HTMLButtonElement | null {
+    const candidates = [
+      this.dialoguePanel.classList.contains('hidden') ? null : this.dialogueActions,
+      this.modal.classList.contains('hidden') ? null : this.modalActions,
+    ].filter(Boolean) as HTMLElement[];
+
+    for (const container of candidates) {
+      const buttons = Array.from(container.querySelectorAll<HTMLButtonElement>('button:not(:disabled)'));
+      if (buttons.length === 1) {
+        return buttons[0];
+      }
+    }
+
+    return null;
   }
 
   private focusFirstAction(container: HTMLElement): void {

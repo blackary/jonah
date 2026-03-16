@@ -56,6 +56,27 @@ test('supports desktop keyboard play, pause settings, save, and continue', async
   expect(snapshot.save?.player.y).toBe(13);
 });
 
+test('space advances focused dialogue actions', async ({ page }) => {
+  await page.goto('/');
+  await startNewGame(page);
+
+  await page.evaluate(() => {
+    void window.__JONAH__?.debugRunScript('messenger', { kind: 'actor', actorId: 'messenger' });
+  });
+
+  await expect(page.getByTestId('dialogue-text')).toHaveText('Jonah son of Amittai, hear the word of the LORD.');
+  await page.keyboard.press('Space');
+  await expect(page.getByTestId('dialogue-text')).toHaveText(
+    'Arise. Go to Nineveh, that great city, and call out against it, for its evil has come up before Him.',
+  );
+  await page.keyboard.press('Space');
+  await expect(page.getByTestId('dialogue-text')).toHaveText('What will Jonah do?');
+  await page.keyboard.press('Space');
+  await expect(page.getByTestId('dialogue-text')).toContainText(
+    'That would have been wisdom. Yet Jonah in this story turns toward the western sea.',
+  );
+});
+
 test('retries trivia with a hint after repeated wrong answers', async ({ page }) => {
   await page.goto('/');
   await startNewGame(page);
